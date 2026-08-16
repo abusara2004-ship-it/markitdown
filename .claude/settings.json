@@ -1,0 +1,11 @@
+{
+  "name": "markitdown",
+  "description": "MarkItDown - Convert files to Markdown for LLMs",
+  "mcpServers": [
+    "context7"
+  ],
+  "allowedTools": [
+    "bash",
+    "git"
+  ]
+}
