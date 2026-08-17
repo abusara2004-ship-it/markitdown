@@ -11,6 +11,8 @@ system, prepared for PDO / Oxy technology-partnership evaluation.
 - **`presentation-deck.html`** — 19-slide presentation version of the same
   findings, for a boardroom walkthrough. Navigate with arrow keys, scroll,
   or the on-screen controls.
+- **`presentation-deck.pptx`** — Downloadable PowerPoint version of the same
+  19-slide deck, for offline use or editing in PowerPoint/Google Slides.
 
 ## Summary
 
