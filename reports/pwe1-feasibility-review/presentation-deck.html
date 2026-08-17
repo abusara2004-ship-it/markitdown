@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PWE1 HOSS-VWP Feasibility Deck</title>
+<style>
+  :root{
+    --navy:#0f1a2b;
+    --navy-2:#16243a;
+    --paper:#faf8f5;
+    --paper-2:#f0ece4;
+    --ink:#1a2332;
+    --ink-soft:#5a6478;
+    --line:#dcd6c9;
+    --teal:#2d6a8c;
+    --teal-soft:#7fa8c2;
+    --orange:#c77a38;
+    --orange-soft:#e0a86a;
+    --white:#ffffff;
+    --font-display: -apple-system,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    --font-body: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    --font-mono: "SF Mono","Roboto Mono",Consolas,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:var(--font-body);
+    background:var(--navy);
+    overflow:hidden;
+    height:100vh;
+  }
+  ::selection{background:var(--teal);color:var(--white);}
+
+  .deck{
+    height:100vh;
+    overflow-y:scroll;
+    scroll-snap-type:y mandatory;
+  }
+  .slide{
+    height:100vh;
+    width:100%;
+    scroll-snap-align:start;
+    scroll-snap-stop:always;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:4vh 8vw;
+    position:relative;
+  }
+  .slide.dark{background:var(--navy);color:var(--white);}
+  .slide.dark-2{background:var(--navy-2);color:var(--white);}
+  .slide.light{background:var(--paper);color:var(--ink);}
+  .slide.light-2{background:var(--paper-2);color:var(--ink);}
+
+  .content{max-width:980px;width:100%;}
+
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:0.75rem;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:var(--teal-soft);
+    margin-bottom:1.25rem;
+    font-weight:600;
+  }
+  .light .eyebrow, .light-2 .eyebrow{color:var(--teal);}
+  .eyebrow.warn{color:var(--orange-soft);}
+  .light .eyebrow.warn, .light-2 .eyebrow.warn{color:var(--orange);}
+
+  h1{
+    font-family:var(--font-display);
+    font-weight:800;
+    font-size:clamp(2.4rem,6vw,4.6rem);
+    line-height:1.02;
+    letter-spacing:-0.02em;
+    text-wrap:balance;
+  }
+  h2{
+    font-family:var(--font-display);
+    font-weight:800;
+    font-size:clamp(1.9rem,4.2vw,3.1rem);
+    line-height:1.08;
+    letter-spacing:-0.015em;
+    text-wrap:balance;
+    margin-bottom:1.5rem;
+  }
+  .lede{
+    font-size:clamp(1.05rem,1.6vw,1.4rem);
+    line-height:1.55;
+    color:var(--ink-soft);
+    max-width:640px;
+    margin-top:1.25rem;
+  }
+  .dark .lede,.dark-2 .lede{color:#aab4c6;}
+
+  .part-num{
+    font-family:var(--font-mono);
+    font-size:clamp(3.5rem,9vw,7rem);
+    font-weight:700;
+    color:var(--teal-soft);
+    opacity:0.35;
+    line-height:1;
+    margin-bottom:1rem;
+  }
+
+  /* COVER */
+  .cover{align-items:flex-start;text-align:left;}
+  .cover .content{display:flex;flex-direction:column;gap:0.5rem;}
+  .cover-footer{
+    display:flex;
+    gap:2.5rem;
+    margin-top:3rem;
+    font-family:var(--font-mono);
+    font-size:0.85rem;
+    color:#8b96ab;
+  }
+  .cover-footer strong{color:var(--white);display:block;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.3rem;color:#8b96ab;font-weight:600;}
+  .cover-footer span{color:var(--white);font-size:1rem;}
+  .badge{
+    display:inline-flex;
+    align-items:center;
+    gap:0.5rem;
+    border:1px solid #2c3a52;
+    border-radius:100px;
+    padding:0.4rem 1rem;
+    font-family:var(--font-mono);
+    font-size:0.8rem;
+    color:var(--teal-soft);
+    margin-top:2rem;
+    width:fit-content;
+  }
+  .dot-live{width:7px;height:7px;border-radius:50%;background:var(--orange-soft);}
+
+  /* AGENDA */
+  .agenda-list{display:flex;flex-direction:column;margin-top:2rem;}
+  .agenda-item{
+    display:grid;
+    grid-template-columns:60px 1fr;
+    gap:1.5rem;
+    padding:1.1rem 0;
+    border-bottom:1px solid var(--line);
+    align-items:baseline;
+  }
+  .agenda-item:first-child{border-top:1px solid var(--line);}
+  .agenda-item .n{font-family:var(--font-mono);color:var(--teal);font-size:0.95rem;font-weight:600;}
+  .agenda-item .t{font-family:var(--font-display);font-weight:700;font-size:1.3rem;letter-spacing:-0.01em;}
+
+  /* CARDS */
+  .card-row{display:grid;gap:1.25rem;margin-top:2rem;}
+  .card-row.c3{grid-template-columns:repeat(3,1fr);}
+  .card-row.c2{grid-template-columns:repeat(2,1fr);}
+  .card{
+    background:var(--white);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:1.6rem;
+  }
+  .card .card-label{
+    font-family:var(--font-mono);
+    font-size:0.7rem;
+    text-transform:uppercase;
+    letter-spacing:0.1em;
+    color:var(--teal);
+    margin-bottom:0.6rem;
+    font-weight:600;
+  }
+  .card .card-title{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:1.25rem;
+    margin-bottom:0.5rem;
+    letter-spacing:-0.01em;
+  }
+  .card .card-body{font-size:0.92rem;color:var(--ink-soft);line-height:1.5;}
+
+  /* STEPS */
+  .steps{display:flex;flex-direction:column;gap:0;margin-top:2rem;}
+  .step-row{
+    display:grid;
+    grid-template-columns:52px 1fr;
+    gap:1.3rem;
+    padding:1rem 0;
+    align-items:flex-start;
+    border-bottom:1px solid var(--line);
+  }
+  .step-row:last-child{border-bottom:none;}
+  .step-num{
+    width:38px;height:38px;
+    border-radius:50%;
+    border:2px solid var(--teal);
+    color:var(--teal);
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--font-mono);font-weight:700;font-size:0.95rem;
+  }
+  .step-row .step-title{font-family:var(--font-display);font-weight:700;font-size:1.1rem;margin-bottom:0.2rem;}
+  .step-row .step-body{font-size:0.9rem;color:var(--ink-soft);}
+
+  /* STAT ROW */
+  .stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;margin-top:2.5rem;}
+  .stat{border-left:3px solid var(--teal);padding-left:1.2rem;}
+  .stat .stat-num{font-family:var(--font-mono);font-weight:700;font-size:clamp(1.8rem,3vw,2.6rem);color:var(--ink);}
+  .dark .stat .stat-num,.dark-2 .stat .stat-num{color:var(--white);}
+  .stat .stat-label{font-size:0.85rem;color:var(--ink-soft);margin-top:0.4rem;}
+  .dark .stat .stat-label,.dark-2 .stat .stat-label{color:#aab4c6;}
+  .stat.orange{border-left-color:var(--orange);}
+
+  /* PILL ROW (energy sources) */
+  .pill-row{display:flex;flex-wrap:wrap;gap:0.7rem;margin-top:1.5rem;}
+  .pill{
+    font-family:var(--font-mono);
+    font-size:0.85rem;
+    padding:0.55rem 1.1rem;
+    border:1px solid var(--teal);
+    color:var(--teal);
+    border-radius:100px;
+  }
+
+  /* TWO COLUMN LISTS */
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;margin-top:2rem;}
+  .split-col h3{
+    font-family:var(--font-mono);
+    font-size:0.78rem;
+    text-transform:uppercase;
+    letter-spacing:0.1em;
+    margin-bottom:1rem;
+    font-weight:700;
+  }
+  .split-col.good h3{color:var(--teal);}
+  .split-col.bad h3{color:var(--orange);}
+  .split-col ul{list-style:none;}
+  .split-col li{
+    font-size:0.95rem;
+    line-height:1.5;
+    padding:0.7rem 0;
+    border-top:1px solid var(--line);
+    color:var(--ink-soft);
+  }
+  .split-col li:last-child{border-bottom:1px solid var(--line);}
+  .split-col li strong{color:var(--ink);font-weight:600;}
+
+  /* VERDICT */
+  .verdict-tag{
+    font-family:var(--font-mono);
+    font-size:0.8rem;
+    letter-spacing:0.15em;
+    text-transform:uppercase;
+    color:var(--orange-soft);
+    margin-bottom:1.2rem;
+  }
+  .verdict-title{
+    font-family:var(--font-display);
+    font-weight:800;
+    font-size:clamp(2.4rem,6vw,4.2rem);
+    line-height:1.03;
+    letter-spacing:-0.02em;
+    text-wrap:balance;
+    margin-bottom:1.8rem;
+  }
+  .conditions{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:2rem;}
+  .condition{
+    border:1px solid #2c3a52;
+    border-radius:4px;
+    padding:1.4rem;
+    background:rgba(255,255,255,0.02);
+  }
+  .condition .cnum{font-family:var(--font-mono);color:var(--teal-soft);font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.6rem;}
+  .condition p{font-size:0.92rem;color:#c3ccdb;line-height:1.5;}
+
+  /* TIMELINE (diligence) */
+  .track-row{display:flex;flex-direction:column;gap:0.9rem;margin-top:2rem;}
+  .track{
+    display:grid;
+    grid-template-columns:200px 1fr 90px;
+    align-items:center;
+    gap:1.5rem;
+    padding:0.9rem 1.2rem;
+    background:var(--white);
+    border:1px solid var(--line);
+    border-radius:4px;
+  }
+  .track .tname{font-family:var(--font-display);font-weight:700;font-size:0.95rem;}
+  .track .tbar{height:8px;background:var(--paper-2);border-radius:4px;overflow:hidden;}
+  .track .tbar-fill{height:100%;background:var(--teal);border-radius:4px;}
+  .track .tweeks{font-family:var(--font-mono);font-size:0.82rem;color:var(--ink-soft);text-align:right;}
+
+  /* NEXT STEPS strip */
+  .strip{display:flex;overflow-x:auto;gap:1rem;margin-top:2rem;padding-bottom:0.5rem;}
+  .strip-item{
+    flex:0 0 220px;
+    background:var(--white);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:1.2rem;
+  }
+  .strip-item .sn{font-family:var(--font-mono);color:var(--teal);font-size:0.8rem;font-weight:700;margin-bottom:0.5rem;}
+  .strip-item .st{font-family:var(--font-display);font-weight:700;font-size:1rem;margin-bottom:0.4rem;}
+  .strip-item .sb{font-size:0.82rem;color:var(--ink-soft);line-height:1.4;}
+
+  /* CLOSING */
+  .closing-stat{
+    font-family:var(--font-mono);
+    font-size:clamp(3rem,8vw,5.5rem);
+    font-weight:700;
+    color:var(--teal-soft);
+    line-height:1;
+  }
+
+  /* NAV RAIL */
+  .rail{
+    position:fixed;
+    right:2rem;
+    top:50%;
+    transform:translateY(-50%);
+    display:flex;
+    flex-direction:column;
+    gap:0.55rem;
+    z-index:50;
+  }
+  .rail-dot{
+    width:7px;height:7px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.25);
+    cursor:pointer;
+    transition:all 0.25s ease;
+    border:none;
+    padding:0;
+  }
+  .rail-dot.active{background:var(--teal-soft);width:9px;height:9px;}
+
+  .progress{
+    position:fixed;
+    top:0;left:0;
+    height:3px;
+    background:var(--teal);
+    z-index:60;
+    transition:width 0.2s ease;
+  }
+
+  .arrows{
+    position:fixed;
+    bottom:2rem;
+    right:2rem;
+    display:flex;
+    gap:0.6rem;
+    z-index:50;
+  }
+  .arrow-btn{
+    width:42px;height:42px;
+    border-radius:50%;
+    border:1px solid rgba(255,255,255,0.25);
+    background:rgba(255,255,255,0.06);
+    color:var(--white);
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;
+    font-size:1.1rem;
+    transition:all 0.2s ease;
+  }
+  .arrow-btn:hover{background:rgba(255,255,255,0.16);}
+  .slide-count{
+    position:fixed;
+    bottom:2.1rem;
+    left:2rem;
+    font-family:var(--font-mono);
+    font-size:0.8rem;
+    color:rgba(255,255,255,0.55);
+    z-index:50;
+  }
+
+  @media (max-width:768px){
+    .rail{display:none;}
+    .split{grid-template-columns:1fr;}
+    .card-row.c3{grid-template-columns:1fr;}
+    .card-row.c2{grid-template-columns:1fr;}
+    .conditions{grid-template-columns:1fr;}
+    .stat-row{grid-template-columns:1fr;gap:1.2rem;}
+    .track{grid-template-columns:1fr;gap:0.6rem;}
+    .arrows{bottom:1rem;right:1rem;}
+    .slide-count{bottom:1.2rem;left:1rem;}
+    .slide{padding:6vh 6vw;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+<div class="slide-count" id="slideCount">01 / 19</div>
+
+<div class="deck" id="deck">
+
+  <!-- 1. COVER -->
+  <section class="slide dark cover">
+    <div class="content">
+      <div class="eyebrow">Feasibility Review</div>
+      <h1>PWE1<br>HOSS™-VWP</h1>
+      <p class="lede">Modular thermal treatment for hypersaline produced water — evaluated as a potential technology partnership for PDO and Oxy.</p>
+      <div class="badge"><span class="dot-live"></span> Vendor claims unverified — pilot required</div>
+      <div class="cover-footer">
+        <div><strong>Prepared For</strong><span>PDO / Oxy Evaluation</span></div>
+        <div><strong>Date</strong><span>August 2026</span></div>
+        <div><strong>Confidence</strong><span>8 / 10</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. AGENDA -->
+  <section class="slide light">
+    <div class="content">
+      <div class="eyebrow">Contents</div>
+      <h2>Six parts.</h2>
+      <div class="agenda-list">
+        <div class="agenda-item"><span class="n">01</span><span class="t">The Problem</span></div>
+        <div class="agenda-item"><span class="n">02</span><span class="t">The Technology</span></div>
+        <div class="agenda-item"><span class="n">03</span><span class="t">Why Oman</span></div>
+        <div class="agenda-item"><span class="n">04</span><span class="t">The Commercial Case</span></div>
+        <div class="agenda-item"><span class="n">05</span><span class="t">Risk & What's Unverified</span></div>
+        <div class="agenda-item"><span class="n">06</span><span class="t">Recommendation</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. PART 01 DIVIDER -->
+  <section class="slide dark-2">
+    <div class="content">
+      <div class="part-num">01</div>
+      <h2 style="margin-bottom:0;">The Problem</h2>
+    </div>
+  </section>
+
+  <!-- 4. THE PROBLEM -->
+  <section class="slide light">
+    <div class="content">
+      <div class="eyebrow">Operational Reality</div>
+      <h2>Produced water is a cost center that steam demand could offset.</h2>
+      <p class="lede">Mature and heavy-oil fields generate large volumes of hypersaline brine. Disposal is expensive. Thermal recovery needs continuous steam. Today these run as two separate cost lines.</p>
+      <div class="stat-row">
+        <div class="stat"><div class="stat-num">High</div><div class="stat-label">Disposal cost per m³ in hypersaline fields</div></div>
+        <div class="stat"><div class="stat-num">Continuous</div><div class="stat-label">Steam demand in thermal-recovery operations</div></div>
+        <div class="stat orange"><div class="stat-num">Unlinked</div><div class="stat-label">These two cost centers rarely share infrastructure today</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. PART 02 DIVIDER -->
+  <section class="slide dark-2">
+    <div class="content">
+      <div class="part-num">02</div>
+      <h2 style="margin-bottom:0;">The Technology</h2>
+    </div>
+  </section>
+
+  <!-- 6. WHAT IS HOSS-VWP -->
+  <section class="slide light">
+    <div class="content">
+      <div class="eyebrow">HOSS™-VWP</div>
+      <h2>One modular system, three recovered outputs.</h2>
+      <p class="lede">A closed-loop indirect-heating system that converts difficult produced water into usable field resources rather than waste.</p>
+      <div class="card-row c3">
+        <div class="card">
+          <div class="card-label">Output 01</div>
+          <div class="card-title">Steam</div>
+          <div class="card-body">Demineralized, high-vapour-fraction steam for field use or EOR injection.</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Output 02</div>
+          <div class="card-title">Clean Water</div>
+          <div class="card-body">Recovered water suitable for reinjection or controlled discharge.</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Output 03</div>
+          <div class="card-title">Mineral Solids</div>
+          <div class="card-body">Concentrated dried solids for disposal — or feed-specific recovery assessment.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. HOW IT WORKS -->
+  <section class="slide light-2">
+    <div class="content">
+      <div class="eyebrow">Process</div>
+      <h2>Five stages, indirect heating throughout.</h2>
+      <div class="steps">
+        <div class="step-row">
+          <div class="step-num">1</div>
+          <div><div class="step-title">Feed Conditioning</div><div class="step-body">Incoming brine is prepared for thermal treatment.</div></div>
+        </div>
+        <div class="step-row">
+          <div class="step-num">2</div>
+          <div><div class="step-title">Slurry Handling</div><div class="step-body">Controlled management of precipitating salts to limit scaling.</div></div>
+        </div>
+        <div class="step-row">
+          <div class="step-num">3</div>
+          <div><div class="step-title">Vapour Separation</div><div class="step-body">Steam is extracted and routed for field reuse.</div></div>
+        </div>
+        <div class="step-row">
+          <div class="step-num">4</div>
+          <div><div class="step-title">Indirect Heating</div><div class="step-body">Waste heat, gas, geothermal, solar thermal, or hybrid input drives the process.</div></div>
+        </div>
+        <div class="step-row">
+          <div class="step-num">5</div>
+          <div><div class="step-title">Water & Solids Recovery</div><div class="step-body">Clean water is separated; remaining minerals are dried and concentrated.</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. CAPACITY & ENERGY -->
+  <section class="slide light">
+    <div class="content">
+      <div class="eyebrow">Specifications</div>
+      <h2>Modular capacity, flexible energy input.</h2>
+      <div class="stat-row" style="grid-template-columns:1fr 1fr;">
+        <div class="stat"><div class="stat-num">240–1,110 m³/d</div><div class="stat-label">Package throughput range</div></div>
+        <div class="stat"><div class="stat-num">1,500–7,000 bbl/d</div><div class="stat-label">Equivalent barrels per day</div></div>
+      </div>
+      <p class="lede" style="margin-top:2rem;">Heating can draw from:</p>
+      <div class="pill-row">
+        <div class="pill">Waste Heat</div>
+        <div class="pill">Waste Gas</div>
+        <div class="pill">Geothermal</div>
+        <div class="pill">Solar Thermal</div>
+        <div class="pill">Hybrid</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. PART 03 DIVIDER -->
+  <section class="slide dark-2">
+    <div class="content">
+      <div class="part-num">03</div>
+      <h2 style="margin-bottom:0;">Why Oman</h2>
+    </div>
+  </section>
+
+  <!-- 10. MARKET FIT -->
+  <section class="slide light">
+    <div class="content">
+      <div class="eyebrow">Strategic Fit</div>
+      <h2>The clearest fit: heavy-oil fields where disposal and steam demand coexist.</h2>
+      <div class="card-row c3">
+        <div class="card">
+          <div class="card-label">Cost</div>
+          <div class="card-title">Opex Reduction</div>
+          <div class="card-body">Converts a disposal cost center into a steam and water source.</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Regulatory</div>
+          <div class="card-title">Compliance Fit</div>
+          <div class="card-body">Closed-loop recovery aligns with Oman's treatment-over-discharge posture.</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Energy</div>
+          <div class="card-title">Efficiency Story</div>
+          <div class="card-body">Waste-heat and flare-gas capture support efficiency and ESG targets.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. PART 04 DIVIDER -->
+  <section class="slide dark-2">
+    <div class="content">
+      <div class="part-num">04</div>
+      <h2 style="margin-bottom:0;">The Commercial Case</h2>
+    </div>
+  </section>
+
+  <!-- 12. ECONOMICS -->
+  <section class="slide light">
+    <div class="content">
+      <div class="eyebrow">Illustrative Only — Field-Specific Model Required</div>
+      <h2>A 500 m³/day module, modeled conservatively.</h2>
+      <div class="stat-row">
+        <div class="stat"><div class="stat-num">$25M</div><div class="stat-label">Estimated CAPEX (module + install)</div></div>
+        <div class="stat"><div class="stat-num">$440K/yr</div><div class="stat-label">Net annual benefit, waste-heat powered</div></div>
+        <div class="stat orange"><div class="stat-num">~57 yrs</div><div class="stat-label">Simple payback — highly sensitive to inputs</div></div>
+      </div>
+      <p class="lede" style="margin-top:2rem;">Payback improves sharply with higher disposal costs, full steam utilization, or free waste-heat input. This is a placeholder model, not an investment figure.</p>
+    </div>
+  </section>
+
+  <!-- 13. PART 05 DIVIDER (orange accent for caution) -->
+  <section class="slide dark-2">
+    <div class="content">
+      <div class="part-num" style="color:var(--orange-soft);">05</div>
+      <h2 style="margin-bottom:0;">Risk & What's Unverified</h2>
+    </div>
+  </section>
+
+  <!-- 14. STRENGTHS VS GAPS -->
+  <section class="slide light-2">
+    <div class="content">
+      <div class="eyebrow warn">Technical Assessment</div>
+      <h2>Credible design, undisclosed performance.</h2>
+      <div class="split">
+        <div class="split-col good">
+          <h3>Strengths</h3>
+          <ul>
+            <li><strong>Modular</strong> — scalable field-by-field, no CAPEX concentration</li>
+            <li><strong>Indirect heating</strong> — lower corrosion, simpler operability</li>
+            <li><strong>Closed loop</strong> — minimal discharge, regulatory friendly</li>
+            <li><strong>Energy flexible</strong> — waste heat reduces fuel exposure</li>
+          </ul>
+        </div>
+        <div class="split-col bad">
+          <h3>Undisclosed</h3>
+          <ul>
+            <li><strong>Energy intensity</strong> — no kWh/m³ figure published</li>
+            <li><strong>Steam spec</strong> — vapour fraction, purity not stated</li>
+            <li><strong>Fouling behavior</strong> — no operating/maintenance data</li>
+            <li><strong>Availability</strong> — no MTBF or uptime target</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 15. RISK VS OPPORTUNITY -->
+  <section class="slide light">
+    <div class="content">
+      <div class="eyebrow warn">Portfolio View</div>
+      <h2>What could go wrong, what could pay off.</h2>
+      <div class="split">
+        <div class="split-col bad">
+          <h3>Risk</h3>
+          <ul>
+            <li>Performance falls short of claims, eroding ROI</li>
+            <li>Scaling degrades heat transfer over time</li>
+            <li>Vendor maturity — no performance guarantees seen</li>
+            <li>Energy cost volatility if not waste-heat powered</li>
+          </ul>
+        </div>
+        <div class="split-col good">
+          <h3>Opportunity</h3>
+          <ul>
+            <li>Immediate disposal-cost avoidance</li>
+            <li>Steam self-sufficiency for thermal recovery</li>
+            <li>Modular rollout spreads capital risk</li>
+            <li>ESG-aligned partnership narrative with Oxy</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 16. PART 06 DIVIDER -->
+  <section class="slide dark-2">
+    <div class="content">
+      <div class="part-num">06</div>
+      <h2 style="margin-bottom:0;">Recommendation</h2>
+    </div>
+  </section>
+
+  <!-- 17. VERDICT -->
+  <section class="slide dark">
+    <div class="content">
+      <div class="verdict-tag">Recommendation</div>
+      <div class="verdict-title">Qualified proceed to pilot.</div>
+      <p class="lede" style="color:#c3ccdb;">Genuine strategic fit for PDO/Oxy heavy-oil operations — contingent on two conditions before any capital commitment.</p>
+      <div class="conditions">
+        <div class="condition">
+          <div class="cnum">Condition 01</div>
+          <p>Independent pilot on representative field water — energy use, steam quality, water recovery, fouling behavior.</p>
+        </div>
+        <div class="condition">
+          <div class="cnum">Condition 02</div>
+          <p>Written performance guarantees tied to liquidated damages — not currently offered.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 18. DILIGENCE + NEXT STEPS -->
+  <section class="slide light">
+    <div class="content">
+      <div class="eyebrow">Path Forward</div>
+      <h2>Five tracks, 18–30 weeks to a decision.</h2>
+      <div class="track-row">
+        <div class="track"><div class="tname">Technical Validation</div><div class="tbar"><div class="tbar-fill" style="width:100%;"></div></div><div class="tweeks">8–12 wks</div></div>
+        <div class="track"><div class="tname">Commercial & Legal</div><div class="tbar"><div class="tbar-fill" style="width:70%;"></div></div><div class="tweeks">6–8 wks</div></div>
+        <div class="track"><div class="tname">Field Economics</div><div class="tbar"><div class="tbar-fill" style="width:55%;"></div></div><div class="tweeks">4–6 wks</div></div>
+        <div class="track"><div class="tname">Execution Readiness</div><div class="tbar"><div class="tbar-fill" style="width:55%;"></div></div><div class="tweeks">4–6 wks</div></div>
+        <div class="track"><div class="tname">Partnership Structure</div><div class="tbar"><div class="tbar-fill" style="width:55%;"></div></div><div class="tweeks">4–6 wks</div></div>
+      </div>
+      <div class="strip">
+        <div class="strip-item"><div class="sn">01</div><div class="st">Engage PWE</div><div class="sb">Technical review + guarantee terms</div></div>
+        <div class="strip-item"><div class="sn">02</div><div class="st">Select Pilot Site</div><div class="sb">High water-cut, thermal-recovery field</div></div>
+        <div class="strip-item"><div class="sn">03</div><div class="st">Independent Engineer</div><div class="sb">Third-party pilot oversight</div></div>
+        <div class="strip-item"><div class="sn">04</div><div class="st">Run Pilot</div><div class="sb">2–8 weeks, representative feed</div></div>
+        <div class="strip-item"><div class="sn">05</div><div class="st">Decision Gate</div><div class="sb">Go / no-go to investment committee</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 19. CLOSING -->
+  <section class="slide dark">
+    <div class="content">
+      <div class="eyebrow">Bottom Line</div>
+      <div class="closing-stat">8/10</div>
+      <p class="lede" style="color:#c3ccdb;max-width:560px;">Confidence in the strategic case. Confidence in the technology remains outstanding until PWE's claims are independently verified in a field pilot.</p>
+      <div class="badge" style="margin-top:2rem;"><span class="dot-live"></span> Not an investment recommendation</div>
+    </div>
+  </section>
+
+</div>
+
+<div class="rail" id="rail"></div>
+<div class="arrows">
+  <button class="arrow-btn" id="prevBtn" aria-label="Previous slide">↑</button>
+  <button class="arrow-btn" id="nextBtn" aria-label="Next slide">↓</button>
+</div>
+
+<script>
+  const deck = document.getElementById('deck');
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const rail = document.getElementById('rail');
+  const progress = document.getElementById('progress');
+  const slideCount = document.getElementById('slideCount');
+  const total = slides.length;
+
+  slides.forEach((s, i) => {
+    const dot = document.createElement('button');
+    dot.className = 'rail-dot';
+    dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+    dot.addEventListener('click', () => slides[i].scrollIntoView({behavior:'smooth'}));
+    rail.appendChild(dot);
+  });
+  const dots = Array.from(rail.children);
+
+  let current = 0;
+
+  function setActive(i){
+    current = i;
+    dots.forEach((d, idx) => d.classList.toggle('active', idx === i));
+    progress.style.width = (((i + 1) / total) * 100) + '%';
+    slideCount.textContent = String(i + 1).padStart(2,'0') + ' / ' + total;
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && entry.intersectionRatio > 0.6) {
+        const idx = slides.indexOf(entry.target);
+        if (idx !== -1) setActive(idx);
+      }
+    });
+  }, { root: deck, threshold: 0.6 });
+
+  slides.forEach(s => observer.observe(s));
+  setActive(0);
+
+  function goTo(i){
+    if (i < 0 || i >= total) return;
+    slides[i].scrollIntoView({behavior:'smooth'});
+  }
+
+  document.getElementById('prevBtn').addEventListener('click', () => goTo(current - 1));
+  document.getElementById('nextBtn').addEventListener('click', () => goTo(current + 1));
+
+  window.addEventListener('keydown', (e) => {
+    if (['ArrowDown','ArrowRight','PageDown',' '].includes(e.key)) { e.preventDefault(); goTo(current + 1); }
+    if (['ArrowUp','ArrowLeft','PageUp'].includes(e.key)) { e.preventDefault(); goTo(current - 1); }
+    if (e.key === 'Home') { e.preventDefault(); goTo(0); }
+    if (e.key === 'End') { e.preventDefault(); goTo(total - 1); }
+  });
+</script>
+
+</body>
+</html>

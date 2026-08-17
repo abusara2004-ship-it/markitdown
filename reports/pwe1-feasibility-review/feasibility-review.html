@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PWE1 HOSS™-VWP Feasibility Review</title>
+  <style>
+    :root {
+      --slate-90: #1a2332;
+      --slate-60: #4a5568;
+      --slate-40: #7a8a9e;
+      --warm-40: #94959b;
+      --off-white: #f8f9fa;
+      --white: #ffffff;
+      --teal: #2d5a8c;
+      --burnt-orange: #c77a38;
+      --caution-light: #fdf4ed;
+
+      --font-display: "IBM Plex Sans Condensed", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-body: Georgia, "Times New Roman", serif;
+      --font-mono: "IBM Plex Mono", monospace;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --slate-90: #f0f2f6;
+        --slate-60: #c0c7d2;
+        --slate-40: #8a93a3;
+        --warm-40: #6b6c72;
+        --off-white: #1a2332;
+        --white: #252d3d;
+        --teal: #5b9fc9;
+        --burnt-orange: #e8a860;
+        --caution-light: #3d2f1f;
+      }
+    }
+
+    :root[data-theme="dark"] {
+      --slate-90: #f0f2f6;
+      --slate-60: #c0c7d2;
+      --slate-40: #8a93a3;
+      --warm-40: #6b6c72;
+      --off-white: #1a2332;
+      --white: #252d3d;
+      --teal: #5b9fc9;
+      --burnt-orange: #e8a860;
+      --caution-light: #3d2f1f;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-body);
+      color: var(--slate-90);
+      background: var(--off-white);
+      line-height: 1.6;
+      font-size: 16px;
+    }
+
+    /* Container & Layout */
+    .container {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 3rem;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 2rem;
+      height: fit-content;
+    }
+
+    .main {
+      min-width: 0;
+    }
+
+    /* Header */
+    .header {
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 2px solid var(--teal);
+    }
+
+    .header h1 {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      font-weight: 700;
+      line-height: 1.2;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      color: var(--slate-90);
+      margin-bottom: 0.5rem;
+    }
+
+    .header .subtitle {
+      font-size: 0.95rem;
+      color: var(--warm-40);
+      font-style: italic;
+    }
+
+    .header .date {
+      font-size: 0.85rem;
+      color: var(--slate-40);
+      margin-top: 1rem;
+    }
+
+    /* Navigation */
+    .nav-section {
+      margin-bottom: 2.5rem;
+    }
+
+    .nav-section h3 {
+      font-family: var(--font-display);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--warm-40);
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    .nav-section ul {
+      list-style: none;
+    }
+
+    .nav-section li {
+      margin-bottom: 0.75rem;
+    }
+
+    .nav-section a {
+      color: var(--slate-60);
+      text-decoration: none;
+      font-size: 0.9rem;
+      border-left: 3px solid transparent;
+      padding-left: 0.75rem;
+      display: block;
+      transition: all 0.2s ease;
+    }
+
+    .nav-section a:hover {
+      color: var(--teal);
+      border-left-color: var(--teal);
+    }
+
+    /* Sections */
+    .section {
+      margin-bottom: 3.5rem;
+    }
+
+    .section h2 {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--slate-90);
+      margin-bottom: 1.5rem;
+      padding-left: 1rem;
+      border-left: 4px solid var(--teal);
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+    }
+
+    .section h3 {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--slate-90);
+      margin-top: 1.5rem;
+      margin-bottom: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+
+    .section p {
+      margin-bottom: 1rem;
+      line-height: 1.7;
+    }
+
+    .section ul, .section ol {
+      margin-left: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .section li {
+      margin-bottom: 0.6rem;
+      line-height: 1.6;
+    }
+
+    /* Box Highlights */
+    .highlight-box {
+      background: var(--white);
+      border-left: 4px solid var(--teal);
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      border-radius: 2px;
+    }
+
+    .highlight-box.caution {
+      background: var(--caution-light);
+      border-left-color: var(--burnt-orange);
+    }
+
+    .highlight-box.caution h4 {
+      color: var(--burnt-orange);
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .highlight-box h4 {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      color: var(--teal);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.75rem;
+    }
+
+    .highlight-box p {
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    /* Validation Checklist */
+    .validation-checklist {
+      background: var(--white);
+      border: 1px solid var(--warm-40);
+      border-radius: 2px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .validation-checklist h4 {
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--burnt-orange);
+      margin-bottom: 1rem;
+    }
+
+    .validation-item {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .validation-item .checkbox {
+      flex-shrink: 0;
+      width: 18px;
+      height: 18px;
+      border: 2px solid var(--burnt-orange);
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .validation-item .checkbox::after {
+      content: "□";
+      font-size: 14px;
+      color: var(--burnt-orange);
+      font-weight: bold;
+    }
+
+    .validation-item .text {
+      flex: 1;
+      color: var(--slate-60);
+    }
+
+    /* Metrics Box */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .metric-card {
+      background: var(--white);
+      border: 1px solid var(--warm-40);
+      padding: 1.25rem;
+      border-radius: 2px;
+    }
+
+    .metric-card .label {
+      font-family: var(--font-display);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--warm-40);
+      margin-bottom: 0.5rem;
+    }
+
+    .metric-card .value {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--teal);
+      font-family: var(--font-mono);
+    }
+
+    .metric-card .note {
+      font-size: 0.8rem;
+      color: var(--slate-40);
+      margin-top: 0.5rem;
+      font-style: italic;
+    }
+
+    /* Table */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 0.9rem;
+    }
+
+    table thead {
+      background: var(--white);
+      border-bottom: 2px solid var(--teal);
+    }
+
+    table th {
+      font-family: var(--font-display);
+      text-align: left;
+      padding: 0.75rem 1rem;
+      font-weight: 600;
+      color: var(--slate-90);
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+    }
+
+    table td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--warm-40);
+      font-variant-numeric: tabular-nums;
+    }
+
+    table tbody tr:hover {
+      background: var(--off-white);
+    }
+
+    /* Risk & Opportunity Matrix */
+    .risk-matrix {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .matrix-card {
+      padding: 1.5rem;
+      border-radius: 2px;
+    }
+
+    .matrix-card.risk {
+      background: #fff5f5;
+      border-left: 4px solid var(--burnt-orange);
+    }
+
+    .matrix-card.opportunity {
+      background: #f0f8ff;
+      border-left: 4px solid var(--teal);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .matrix-card.risk {
+        background: #4d2e2e;
+      }
+      .matrix-card.opportunity {
+        background: #1f3a52;
+      }
+    }
+
+    :root[data-theme="dark"] .matrix-card.risk {
+      background: #4d2e2e;
+    }
+
+    :root[data-theme="dark"] .matrix-card.opportunity {
+      background: #1f3a52;
+    }
+
+    .matrix-card h4 {
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.75rem;
+      color: var(--slate-90);
+    }
+
+    .matrix-card.risk h4 {
+      color: var(--burnt-orange);
+    }
+
+    .matrix-card ul {
+      margin-left: 1.5rem;
+    }
+
+    .matrix-card li {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: var(--slate-60);
+    }
+
+    /* Recommendation Box */
+    .recommendation {
+      background: var(--white);
+      border: 2px solid var(--teal);
+      padding: 2rem;
+      border-radius: 2px;
+      margin: 2rem 0;
+    }
+
+    .recommendation h4 {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--teal);
+      margin-bottom: 1rem;
+    }
+
+    .recommendation p {
+      line-height: 1.7;
+      margin-bottom: 1rem;
+    }
+
+    /* Next Steps */
+    .next-steps {
+      display: grid;
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .step {
+      counter-increment: step-counter;
+      display: grid;
+      grid-template-columns: 40px 1fr;
+      gap: 1rem;
+    }
+
+    .step::before {
+      content: counter(step-counter);
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--teal);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--white);
+      border: 2px solid var(--teal);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+    }
+
+    .step-content h5 {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--slate-90);
+      margin-bottom: 0.5rem;
+    }
+
+    .step-content p {
+      font-size: 0.9rem;
+      color: var(--slate-60);
+      line-height: 1.6;
+    }
+
+    .next-steps {
+      counter-reset: step-counter;
+    }
+
+    /* Footer */
+    .footer {
+      margin-top: 4rem;
+      padding-top: 2rem;
+      border-top: 2px solid var(--warm-40);
+      font-size: 0.85rem;
+      color: var(--warm-40);
+    }
+
+    .footer p {
+      margin-bottom: 0.5rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .container {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        padding: 2rem 1.5rem;
+      }
+
+      .sidebar {
+        position: relative;
+        top: auto;
+      }
+
+      .header h1 {
+        font-size: 1.8rem;
+      }
+
+      .metrics-grid, .risk-matrix {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      body {
+        font-size: 15px;
+      }
+
+      .header h1 {
+        font-size: 1.5rem;
+      }
+
+      .section h2 {
+        font-size: 1.3rem;
+      }
+
+      .nav-section {
+        display: none;
+      }
+    }
+
+    /* Print Styles */
+    @media print {
+      body {
+        background: white;
+        color: black;
+      }
+
+      .nav-section {
+        display: none;
+      }
+
+      .container {
+        grid-template-columns: 1fr;
+        max-width: 100%;
+        padding: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <nav>
+        <div class="nav-section">
+          <h3>Sections</h3>
+          <ul>
+            <li><a href="#executive">Executive Summary</a></li>
+            <li><a href="#technology">Technology Overview</a></li>
+            <li><a href="#market">Market Fit</a></li>
+            <li><a href="#technical">Technical Assessment</a></li>
+            <li><a href="#commercial">Commercial Viability</a></li>
+            <li><a href="#risks">Risks & Opportunities</a></li>
+            <li><a href="#diligence">Due Diligence</a></li>
+            <li><a href="#recommendation">Recommendation</a></li>
+            <li><a href="#next-steps">Next Steps</a></li>
+          </ul>
+        </div>
+
+        <div class="nav-section">
+          <h3>Quick Facts</h3>
+          <ul style="list-style: none; font-size: 0.9rem; color: var(--slate-60); line-height: 1.7;">
+            <li><strong>Vendor:</strong> PWE (Produced Water Engineering)</li>
+            <li><strong>Technology:</strong> HOSS™-VWP (modular thermal system)</li>
+            <li><strong>Capacity:</strong> 240–1,110 m³/day (1,500–7,000 bbl/day)</li>
+            <li><strong>Target:</strong> High-salinity oilfield water treatment</li>
+            <li><strong>Outputs:</strong> Steam, clean water, mineral solids</li>
+            <li><strong>Confidence Level:</strong> 8/10 (vendor claims, unverified)</li>
+          </ul>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main">
+      <header class="header">
+        <h1>PWE1 HOSS™-VWP<br>Feasibility Review</h1>
+        <p class="subtitle">Modular Thermal Produced-Water Treatment for Heavy Oil & EOR Operations</p>
+        <p class="date">Prepared for: PDO / Oxy Evaluation<br>Date: August 2026</p>
+      </header>
+
+      <!-- Executive Summary -->
+      <section id="executive" class="section">
+        <h2>Executive Summary</h2>
+
+        <p><strong>Opportunity:</strong> PWE's HOSS™-VWP addresses a genuine operational need in water-intensive petroleum operations—particularly for PDO's heavy-oil fields where produced-water disposal is expensive and steam demand is continuous. The system converts hypersaline oilfield brine into demineralized steam (for field use or EOR), recovered clean water, and mineral solids suitable for controlled disposal or recovery assessment.</p>
+
+        <div class="highlight-box">
+          <h4>Recommendation</h4>
+          <p>PWE1 merits evaluation as a potential integrated hydrocarbon partnership (IHP) opportunity <strong>contingent on technical validation</strong>. The technology addresses real operational costs and fits PDO's energy recovery strategy. However, vendor claims remain unverified—performance, reliability, and project economics require independent assessment before commitment.</p>
+        </div>
+
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="label">Capacity Range</div>
+            <div class="value">240–1,110 m³/d</div>
+            <div class="note">~1,500–7,000 bbl/day</div>
+          </div>
+          <div class="metric-card">
+            <div class="label">Key Outputs</div>
+            <div class="value">3</div>
+            <div class="note">Steam, clean water, mineral solids</div>
+          </div>
+          <div class="metric-card">
+            <div class="label">Energy Inputs</div>
+            <div class="value">Flexible</div>
+            <div class="note">Waste heat, gas, geothermal, solar, hybrid</div>
+          </div>
+          <div class="metric-card">
+            <div class="label">Verification Status</div>
+            <div class="value">Unverified</div>
+            <div class="note">Vendor claims only; no independent testing</div>
+          </div>
+        </div>
+
+        <p><strong>Confidence Level:</strong> <em>8/10</em> (strong synthesis of vendor material; independent evidence outstanding)</p>
+      </section>
+
+      <!-- Technology Overview -->
+      <section id="technology" class="section">
+        <h2>Technology Overview</h2>
+
+        <h3>HOSS™-VWP Core Function</h3>
+        <p>HOSS™-VWP is a modular, indirect-heating thermal system designed to treat difficult produced water—specifically high-salinity and hypersaline brines typical of mature oil and gas fields. The system operates in a closed loop, combining multiple unit operations:</p>
+
+        <ul>
+          <li><strong>Feed conditioning</strong> – Prepares incoming brine for treatment</li>
+          <li><strong>Controlled slurry handling</strong> – Manages scaling and salt precipitation during heating</li>
+          <li><strong>Vapour separation/reuse</strong> – Extracts and recycles steam for field use or EOR</li>
+          <li><strong>Indirect heating</strong> – Uses waste heat, waste gas, geothermal, solar thermal, or hybrid energy sources</li>
+          <li><strong>Water recovery</strong> – Produces demineralized or near-demineralized water suitable for reinjection or disposal</li>
+          <li><strong>Solids drying</strong> – Concentrates mineral precipitate for controlled disposal or recovery assessment</li>
+        </ul>
+
+        <h3>Key Technical Claims</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Parameter</th>
+              <th>Claimed Capability</th>
+              <th>Verification Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Throughput (baseline)</td>
+              <td>240–1,110 m³/day (feed-dependent)</td>
+              <td>Unverified; field validation required</td>
+            </tr>
+            <tr>
+              <td>Steam output quality</td>
+              <td>High-vapour-fraction demineralized steam</td>
+              <td>No published quality specs or independent test</td>
+            </tr>
+            <tr>
+              <td>Water recovery rate</td>
+              <td>Feed-specific; not disclosed</td>
+              <td>Critical gap; needs pilot confirmation</td>
+            </tr>
+            <tr>
+              <td>Energy consumption</td>
+              <td>Depends on heat source and feed chemistry</td>
+              <td>No published energy intensity (kWh/m³ or BTU/bbl)</td>
+            </tr>
+            <tr>
+              <td>Fouling/scaling control</td>
+              <td>Managed via slurry handling & indirect heating</td>
+              <td>No operational availability or maintenance data</td>
+            </tr>
+            <tr>
+              <td>Mineral recovery potential</td>
+              <td>Feed-specific; rare-earth upside claimed</td>
+              <td>No commercialization pathway; speculative</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="highlight-box caution">
+          <h4>⚠ Unverified Performance Claims</h4>
+          <p>All performance figures, patent count, availability rates, and project experience currently displayed by PWE are vendor claims. No independent test reports, third-party validations, or published reference installations have been reviewed. This section summarizes vendor material only.</p>
+        </div>
+      </section>
+
+      <!-- Market Fit -->
+      <section id="market" class="section">
+        <h2>Market Fit: Oman & PDO/OQ Operations</h2>
+
+        <h3>Primary Use Case</h3>
+        <p>For Oman's petroleum sector—particularly PDO and Oxy operations—the clearest fit is <strong>heavy-oil or water-intensive fields where produced-water disposal and steam generation coexist</strong>. Typical scenarios include:</p>
+
+        <ul>
+          <li><strong>Thermal recovery projects</strong> (steam flooding, CSS) requiring continuous steam supply and facing high disposal costs for produced water</li>
+          <li><strong>Mature fields with high water cut</strong> where produced-water volumes exceed injection capacity and disposal options are limited or expensive</li>
+          <li><strong>Hypersaline reserves</strong> (e.g., tight carbonate formations) where brine treatment is a operational bottleneck</li>
+          <li><strong>Enhanced Oil Recovery (EOR)</strong> schemes that benefit from both recovered steam and recycled water</li>
+        </ul>
+
+        <h3>Energy Flexibility</h3>
+        <p>PWE positions HOSS™-VWP to use multiple energy inputs:</p>
+        <ul>
+          <li>Waste heat from existing power generation or gas processing</li>
+          <li>Stranded or flare gas (subject to regulatory approval)</li>
+          <li>Geothermal resources (limited in most Oman fields, but worth assessing in specific regions)</li>
+          <li>Solar thermal (increasing viability; aligns with Oman's renewable energy strategy)</li>
+          <li>Hybrid configurations for load balancing</li>
+        </ul>
+
+        <p>This flexibility is strategically important: it reduces dependence on dedicated fuel and improves project economics by leveraging existing energy resources.</p>
+
+        <h3>Strategic Alignment</h3>
+        <div class="highlight-box">
+          <h4>Why This Matters for PDO/Oxy</h4>
+          <p><strong>Cost reduction:</strong> Produced-water disposal is a major opex item in mature fields. Converting that cost center into a steam/water source reduces net abandonment liability and improves recovery economics.</p>
+          <p><strong>Regulatory fit:</strong> Oman's environmental and water-use policies favor treatment and recovery over discharge. HOSS™-VWP produces minimal disposal waste and recovers valuable freshwater.</p>
+          <p><strong>Energy efficiency:</strong> Capturing waste heat or flare gas for heating is aligned with Oman's climate commitments and PDO's efficiency targets.</p>
+        </div>
+      </section>
+
+      <!-- Technical Assessment -->
+      <section id="technical" class="section">
+        <h2>Technical Assessment</h2>
+
+        <h3>Strengths</h3>
+        <ul>
+          <li><strong>Modular design:</strong> Scalable capacity (240–1,110 m³/day) suits field-by-field deployment without major CAPEX concentration</li>
+          <li><strong>Indirect heating:</strong> Reduces corrosion and fouling compared to direct-contact designs; simpler operability for field teams</li>
+          <li><strong>Closed-loop operation:</strong> Minimal environmental discharge; supports regulatory compliance</li>
+          <li><strong>Energy flexibility:</strong> Can integrate with existing waste heat or renewable resources; reduces operating cost and fuel exposure</li>
+        </ul>
+
+        <h3>Critical Gaps</h3>
+        <ul>
+          <li><strong>Energy intensity:</strong> No published data on energy consumption per cubic meter of feed treated. Essential for project economics.</li>
+          <li><strong>Steam quality specification:</strong> Vapour fraction, temperature, pressure profile, and chemical purity not disclosed. Critical for EOR or steam-injection applications.</li>
+          <li><strong>Scaling/fouling behaviour:</strong> No available operating data on fouling rates, maintenance frequency, or cleaning procedures under different feed chemistries. High-salinity waters are prone to mineral precipitation; field data is essential.</li>
+          <li><strong>Operating availability:</strong> No published mean time between failures (MTBF) or availability targets. Reliability in remote field environments is critical.</li>
+          <li><strong>Water recovery rate:</strong> Percentage of feed recovered as clean water depends heavily on feed composition and operating conditions—not disclosed in available material.</li>
+          <li><strong>Solids disposal & classification:</strong> Mineral precipitate composition, volume, disposal cost, and regulatory classification not detailed. This can become a project blocker if disposal is uneconomical.</li>
+          <li><strong>Performance guarantees:</strong> No written performance warranties identified. Standard in major EPC contracts; absence suggests early commercial maturity.</li>
+        </ul>
+
+        <h3>Recommendation: Pilot Program</h3>
+        <div class="validation-checklist">
+          <h4>Required Pilot Scope</h4>
+          <div class="validation-item">
+            <div class="checkbox"></div>
+            <div class="text"><strong>Representative feed sample:</strong> Actual produced water from target PDO/Oxy field (hypersaline if possible). Lab or bench-scale testing with vendor or third-party engineer.</div>
+          </div>
+          <div class="validation-item">
+            <div class="checkbox"></div>
+            <div class="text"><strong>Energy consumption profile:</strong> Measure inlet/outlet temperatures, heat input (kW), and feed flowrate to calculate thermal efficiency and cost per m³.</div>
+          </div>
+          <div class="validation-item">
+            <div class="checkbox"></div>
+            <div class="text"><strong>Steam quality & yield:</strong> Characterize vapour fraction, superheat, dissolved minerals, and volumetric or mass yield under different operating points.</div>
+          </div>
+          <div class="validation-item">
+            <div class="checkbox"></div>
+            <div class="text"><strong>Water recovery rate & quality:</strong> Measure clean-water yield (m³/day) and composition (conductivity, suspended solids, metals); confirm suitability for reinjection.</div>
+          </div>
+          <div class="validation-item">
+            <div class="checkbox"></div>
+            <div class="text"><strong>Solids characterization:</strong> Dry, weigh, and classify mineral precipitate. Identify disposal pathway (landfill, deep well, marine, etc.) and associated costs.</div>
+          </div>
+          <div class="validation-item">
+            <div class="checkbox"></div>
+            <div class="text"><strong>Scaling & maintenance:</strong> Run pilot for 500–1000 operating hours; document any scale formation, cleaning requirements, and chemical consumption.</div>
+          </div>
+          <div class="validation-item">
+            <div class="checkbox"></div>
+            <div class="text"><strong>Vendor performance guarantees:</strong> Request written performance bonds or liquidated-damages clauses tied to energy consumption, steam yield, and availability.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Commercial Viability -->
+      <section id="commercial" class="section">
+        <h2>Commercial Viability</h2>
+
+        <h3>Economic Model Framework</h3>
+        <p>The investment case for HOSS™-VWP rests on offsetting costs against benefits:</p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Cost/Benefit Category</th>
+              <th>Impact</th>
+              <th>Data Required</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>CAPEX</strong> (module cost, installation)</td>
+              <td>Up to $15M–50M per unit (estimate; unverified)</td>
+              <td>Vendor quote for 500–1000 m³/day unit; local installation cost</td>
+            </tr>
+            <tr>
+              <td><strong>OPEX</strong> (energy, chemicals, labour)</td>
+              <td>Payoff depends critically on energy source (waste heat ≈ $0, fuel = $5–15/GJ)</td>
+              <td>Pilot-measured energy intensity (kWh/m³); chemical consumption; local labour rates</td>
+            </tr>
+            <tr>
+              <td><strong>Avoided disposal cost</strong></td>
+              <td>High: $1–5/m³ in Oman (deep well, marine, treatment)</td>
+              <td>PDO's current disposal cost baseline by field</td>
+            </tr>
+            <tr>
+              <td><strong>Recovered steam value</strong></td>
+              <td>High: $3–8/GJ equivalent (if used for EOR or heating); $0 if flared</td>
+              <td>Steam demand in target field; current steam-generation cost</td>
+            </tr>
+            <tr>
+              <td><strong>Recovered water value</strong></td>
+              <td>Moderate: $0–2/m³ (depends on reinjection capacity and water balance)</td>
+              <td>Field water balance assessment</td>
+            </tr>
+            <tr>
+              <td><strong>Mineral recovery upside</strong></td>
+              <td>Speculative; depends on rare-earth or salt commodity prices</td>
+              <td>Feed assay; commodity price forecast; commercialization pathway (unproven)</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Preliminary Payback Analysis (Scenario)</h3>
+        <p><em>Illustrative example for a 500 m³/day module in a thermal-recovery field:</em></p>
+        <ul>
+          <li><strong>CAPEX:</strong> ~$25M (module + installation)</li>
+          <li><strong>Annual disposal avoided:</strong> 500 m³/d × 365 d × $2/m³ = $365k</li>
+          <li><strong>Annual steam value (EOR input):</strong> Assume 80% of feed becomes steam; ~400 m³/d steam ≈ 200 tonnes/day ≈ $100–150k value (conservative)</li>
+          <li><strong>Annual energy cost (waste-heat powered):</strong> ~$50k maintenance + labour</li>
+          <li><strong>Net annual benefit:</strong> $365k + $125k – $50k = <strong>$440k/year</strong></li>
+          <li><strong>Simple payback (no time value):</strong> ~57 years</li>
+        </ul>
+
+        <div class="highlight-box caution">
+          <h4>⚠ Commercial Sensitivity</h4>
+          <p>The payback calculation is highly sensitive to energy cost (waste heat vs. fuel), disposal cost assumptions, and steam utilization. If energy must be purchased (not waste heat), or if steam value is lower than modeled, payback extends significantly. If disposal cost is higher ($3–5/m³) or steam is fully valued in a thermal-recovery project, payback improves to 20–30 years. A detailed field-specific economic model is required before investment commitment.</p>
+        </div>
+
+        <h3>Competitive Positioning</h3>
+        <p>Thermal produced-water treatment is not a novel concept; however, most deployed systems are large, centralized facilities (e.g., multi-stage flash, reverse osmosis). HOSS™-VWP's modularity and waste-heat flexibility are competitive strengths if they deliver on cost and reliability. Without independent performance data, it is difficult to assess true competitive advantage versus established vendors (e.g., Veolia, Aqua Metals, Petrolite).</p>
+
+        <div class="highlight-box">
+          <h4>Commercial Readiness</h4>
+          <p>PWE appears to be in early commercial deployment. The lack of published reference installations in comparable fields, absence of performance warranties, and minimal third-party validation suggest the technology is transitioning from development to market. This is not necessarily disqualifying—but it increases execution risk and argues for a structured pilot before full commitment.</p>
+        </div>
+      </section>
+
+      <!-- Risks & Opportunities -->
+      <section id="risks" class="section">
+        <h2>Risks & Opportunities</h2>
+
+        <div class="risk-matrix">
+          <div class="matrix-card risk">
+            <h4>Key Risks</h4>
+            <ul>
+              <li><strong>Performance risk:</strong> Actual energy consumption, steam yield, or water recovery may fall short of vendor claims, eroding project economics.</li>
+              <li><strong>Scaling/fouling:</strong> High-salinity feeds are prone to mineral precipitation. Uncontrolled fouling can degrade heat transfer and reduce availability, driving down ROI.</li>
+              <li><strong>Operational complexity:</strong> Module management (feed conditioning, slurry handling, solids drying) may exceed field team capability without significant training or on-site vendor support, increasing OPEX.</li>
+              <li><strong>Regulatory uncertainty:</strong> Mineral solids disposal classification and environmental approval timelines in Oman are not fully predictable.</li>
+              <li><strong>Vendor maturity:</strong> Limited deployment history and absence of performance guarantees increase counterparty risk. PWE's financial stability and technical support capacity are unverified.</li>
+              <li><strong>Energy cost volatility:</strong> If powered by fuel (gas, electricity), project economics are exposed to commodity price swings.</li>
+            </ul>
+          </div>
+
+          <div class="matrix-card opportunity">
+            <h4>Key Opportunities</h4>
+            <ul>
+              <li><strong>Opex reduction:</strong> Disposal cost avoidance is substantial and immediate. Proven energy efficiency could deliver $1–2M annual savings per module in heavy-oil fields.</li>
+              <li><strong>Steam self-sufficiency:</strong> Thermal-recovery fields can reduce reliance on central power generation, improving operational resilience.</li>
+              <li><strong>Water recycling:</strong> Recovered clean water supports enhanced injection, extending field life and reducing water-treatment infrastructure burden.</li>
+              <li><strong>Scalability:</strong> Modular design allows phased deployment across multiple fields, reducing capital concentration and portfolio risk.</li>
+              <li><strong>ESG alignment:</strong> Oman's renewable-energy and circular-economy mandates favor waste-heat recovery and produced-water recycling. HOSS™-VWP is positioned well for sustainability narratives and potential government incentives.</li>
+              <li><strong>IHP partnership model:</strong> Technology partnerships with international operators (e.g., Oxy) can reduce PDO's technology capital burden and create revenue-sharing arrangements.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Due Diligence -->
+      <section id="diligence" class="section">
+        <h2>Due Diligence & Verification Plan</h2>
+
+        <p>Before advancing to investment committee approval or negotiating an IHP framework, the following due diligence elements are essential:</p>
+
+        <h3>1. Technical Validation (8–12 weeks)</h3>
+        <div class="validation-checklist">
+          <h4>Deliverables</h4>
+          <div class="validation-item">
+            <div class="checkbox"></div>
+            <div class="text">Bench-scale or pilot test with representative field water; independent engineer report on energy consumption, steam quality, and water recovery</div>
+          </div>
+          <div class="validation-item">
+            <div class="checkbox"></div>
+            <div class="text">Vendor response to detailed technical questionnaire (steam specs, fouling/maintenance data, availability targets, guarantees)</div>
+          </div>
+          <div class="validation-item">
+            <div class="checkbox"></div>
+            <div class="text">Review of any published patents, academic papers, or third-party test reports</div>
+          </div>
+          <div class="validation-item">
+            <div class="checkbox"></div>
+            <div class="text">Site visit to a reference installation (if available); interview with operator on reliability and economics</div>
+          </div>
+        </div>
+
+        <h3>2. Commercial & Legal (6–8 weeks)</h3>
+        <div class="validation-checklist">
+          <h4>Deliverables</h4>
+          <div class="validation-item">
+            <div class="checkbox"></div>
+            <div class="text">Vendor financial due diligence: credit rating, ownership structure, R&D spend, customer base, revenue history</div>
+          </div>
+          <div class="validation-item">
+            <div class="checkbox"></div>
+            <div class="text">IP audit: patent portfolio, licensing agreements, freedom-to-operate assessment in Oman</div>
+          </div>
+          <div class="validation-item">
+            <div class="checkbox"></div>
+            <div class="text">Sample commercial terms: EPC contract, performance guarantees, warranty period, support/maintenance scope</div>
+          </div>
+          <div class="validation-item">
+            <div class="checkbox"></div>
+            <div class="text">Regulatory assessment: mineral-solids disposal approval pathways in Oman; environmental permitting timelines</div>
+          </div>
+        </div>
+
+        <h3>3. Field Economics (4–6 weeks)</h3>
+        <div class="validation-checklist">
+          <h4>Deliverables</h4>
+          <div class="validation-item">
+            <div class="checkbox"></div>
+            <div class="text">Field-specific baseline: current produced-water volume, disposal cost, steam demand, energy cost, water balance</div>
+          </div>
+          <div class="validation-item">
+            <div class="checkbox"></div>
+            <div class="text">Detailed economic model: CAPEX, OPEX, sensitivity analysis (energy cost, disposal cost, steam value, reliability assumptions)</div>
+          </div>
+          <div class="validation-item">
+            <div class="checkbox"></div>
+            <div class="text">IRR, NPV, payback period under base-case and downside scenarios</div>
+          </div>
+          <div class="validation-item">
+            <div class="checkbox"></div>
+            <div class="text">Comparative analysis: alternative disposal/steam-generation methods (reverse osmosis, central boiler, third-party contractor)</div>
+          </div>
+        </div>
+
+        <h3>4. Execution Readiness (4–6 weeks)</h3>
+        <div class="validation-checklist">
+          <h4>Deliverables</h4>
+          <div class="validation-item">
+            <div class="checkbox"></div>
+            <div class="text">Site layout and permitting: space, utilities, tie-in points for produced water, steam, and mineral disposal</div>
+          </div>
+          <div class="validation-item">
+            <div class="checkbox"></div>
+            <div class="text">Vendor project schedule and resource plan: EPC timeline, staffing, training requirements</div>
+          </div>
+          <div class="validation-item">
+            <div class="checkbox"></div>
+            <div class="text">Operations & maintenance plan: field team training, spare-parts strategy, support agreement with vendor</div>
+          </div>
+          <div class="validation-item">
+            <div class="checkbox"></div>
+            <div class="text">Risk register and mitigation plan</div>
+          </div>
+        </div>
+
+        <h3>5. Partnership Structure (4–6 weeks)</h3>
+        <p>If proceeding as an IHP or joint venture:</p>
+        <div class="validation-checklist">
+          <h4>Deliverables</h4>
+          <div class="validation-item">
+            <div class="checkbox"></div>
+            <div class="text">MOU or term sheet with Oxy (or other partner) defining cost-sharing, revenue-sharing, and governance</div>
+          </div>
+          <div class="validation-item">
+            <div class="checkbox"></div>
+            <div class="text">Technology licensing or IP transfer agreement with PWE</div>
+          </div>
+          <div class="validation-item">
+            <div class="checkbox"></div>
+            <div class="text">Joint venture or project-company structure (legal and tax implications)</div>
+          </div>
+        </div>
+
+        <p><strong>Total Due Diligence Timeline:</strong> 18–30 weeks (4.5–7 months) for a single field pilot or full evaluation pathway.</p>
+      </section>
+
+      <!-- Recommendation -->
+      <section id="recommendation" class="section">
+        <h2>Recommendation</h2>
+
+        <div class="recommendation">
+          <h4>Recommendation: Qualified Proceed to Pilot</h4>
+          <p><strong>Status:</strong> PWE's HOSS™-VWP technology is worth pursuing as a potential IHP partnership opportunity for PDO and Oxy, with two conditions:</p>
+
+          <h3 style="margin-top: 1.5rem; margin-bottom: 1rem; font-size: 1rem;">Condition 1: Technical Validation</h3>
+          <p>Conduct a structured pilot program (bench-scale or small field trial) to verify energy consumption, steam quality, water recovery rate, and scaling/fouling behaviour using representative produced water from the target field. Pilot must be independent or co-managed by a third-party engineer (not PWE alone). Allow 8–12 weeks.</p>
+
+          <h3 style="margin-top: 1.5rem; margin-bottom: 1rem; font-size: 1rem;">Condition 2: Performance Guarantees</h3>
+          <p>Require PWE to provide written performance guarantees (energy consumption per m³, steam yield, water recovery rate, minimum availability) tied to liquidated damages or performance bonds. Without these, investment risk is unacceptably high for a capital-intensive IHP commitment.</p>
+
+          <h3 style="margin-top: 1.5rem; margin-bottom: 1rem; font-size: 1rem;">Investment Thesis</h3>
+          <p>If pilot results are positive and PWE commits to performance guarantees, the investment case is strong: produced-water disposal is a genuine cost centre in PDO's heavy-oil portfolio; steam and water recovery align with energy efficiency and ESG mandates; modular deployment reduces capital concentration; and Oxy's participation as an IHP partner spreads technical risk and capital burden.</p>
+
+          <h3 style="margin-top: 1.5rem; margin-bottom: 1rem; font-size: 1rem;">Confidence Level</h3>
+          <p><strong>8/10</strong> (strong summary of vendor material; technical and commercial validation outstanding)</p>
+        </div>
+      </section>
+
+      <!-- Next Steps -->
+      <section id="next-steps" class="section">
+        <h2>Next Steps</h2>
+
+        <div class="next-steps">
+          <div class="step">
+            <div class="step-content">
+              <h5>Engage PWE for Detailed Discussion</h5>
+              <p>Schedule technical review with PWE leadership and engineering team. Present pilot scope, performance-guarantee requirements, and commercialization questions. Assess vendor responsiveness and technical depth.</p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-content">
+              <h5>Identify Field Pilot Site</h5>
+              <p>Select a PDO or Oxy field with high produced-water volume, high disposal cost, and steam demand (thermal recovery preferred). Secure water sample and operational baseline (flow, composition, current disposal method, disposal cost).</p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-content">
+              <h5>Procure Independent Engineer</h5>
+              <p>Contract a recognized thermal/water-treatment engineer (e.g., Worley, Fluor, TechnipFMC, or local partner) to design and oversee pilot testing. Define scope of work, success criteria, and reporting obligations.</p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-content">
+              <h5>Execute Pilot Program</h5>
+              <p>Run bench-scale or small pilot system (2–8 weeks) with representative field water. Measure energy consumption, steam quality, water recovery, and fouling behaviour. Collect data for technical and economic model validation.</p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-content">
+              <h5>Conduct Commercial Due Diligence</h5>
+              <p>In parallel with pilot, complete vendor financial assessment, IP audit, regulatory approval roadmap, and develop detailed field-specific economic model. Identify partnership structure (IHP, joint venture, or standalone PDO/Oxy project).</p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-content">
+              <h5>Review & Decision Gate</h5>
+              <p>Upon pilot completion (week 12–16), assess results against success criteria. If positive, escalate to investment committee with final recommendation, economic model, and partnership term sheet. If results are inconclusive, define additional validation or determine go/no-go.</p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-content">
+              <h5>Negotiate IHP Framework (if Go)</h5>
+              <p>Engage PWE and Oxy on commercial terms: technology licensing, EPC contract, performance guarantees, cost-sharing, and revenue distribution. Develop MOU and detailed project schedule for field deployment.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Appendix: Notes -->
+      <section id="appendix" class="section">
+        <h2>Appendix: Assessment Methodology & Confidence Caveats</h2>
+
+        <h3>Information Sources</h3>
+        <p>This review is based on PWE's public technology page (pwe1.co) and available marketing material. The assessment captures vendor claims accurately; however, it does not constitute independent verification.</p>
+
+        <h3>Confidence Level: 8/10</h3>
+        <p><strong>What we know with confidence:</strong> PWE's stated technical approach (modular thermal treatment, waste-heat flexibility, closed-loop operation) is credible and addresses a real operational need in water-intensive oil and gas fields. The market opportunity in Oman is genuine.</p>
+
+        <p><strong>What remains unverified:</strong> Actual performance specifications (energy consumption, steam yield, water recovery, reliability), commercial deployment history, customer references, financial stability of vendor, and applicability to PDO's specific field conditions.</p>
+
+        <p><strong>Recommendation confidence:</strong> The recommendation to proceed to pilot is based on a plausible value proposition and strategic fit. Confidence in a full investment commitment remains contingent on pilot results and commercial due diligence.</p>
+
+        <h3>Comparison with Other AI Tools (Cross-Model Audit)</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Tool</th>
+              <th>Strength</th>
+              <th>Weakness</th>
+              <th>Likely Improvement</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>ChatGPT</strong></td>
+              <td>Practical Oman/IHP commercial framing</td>
+              <td>May rely too heavily on vendor material without enough independent scrutiny</td>
+              <td>Add a pilot and commercial-risk checklist</td>
+            </tr>
+            <tr>
+              <td><strong>Gemini</strong></td>
+              <td>Broad technical synthesis</td>
+              <td>Can overstate technical confidence without independent validation</td>
+              <td>Add more engineering due-diligence detail</td>
+            </tr>
+            <tr>
+              <td><strong>Claude</strong></td>
+              <td>Clear caveats and structured diligence</td>
+              <td>May be less commercially assertive; hedges aggressively</td>
+              <td>Sharpen the partnership recommendation; be more decisive</td>
+            </tr>
+            <tr>
+              <td><strong>Perplexity</strong></td>
+              <td>Fast external-source discovery (if web access available)</td>
+              <td>May summarize sources without enough operational context</td>
+              <td>Find independent deployment evidence; seek oil-industry analyst coverage</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Best Approach for This Task</h3>
+        <p><strong>Best single tool:</strong> ChatGPT with browser access + engineering due diligence</p>
+        <p><strong>Best combination:</strong> ChatGPT + independent process engineer + pilot-water laboratory</p>
+        <p><strong>Weakest aspect of this review:</strong> No independent validation of PWE's technical and commercial claims; no third-party reference installations assessed</p>
+        <p><strong>Critical facts requiring verification:</strong> Actual installed references, performance guarantees in writing, energy-per-m³ measurements, Oman regulatory approvals, and detailed project economics</p>
+      </section>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <p><strong>Document Status:</strong> Feasibility Review – Not an Investment Recommendation</p>
+        <p><strong>Distribution:</strong> Prepared for PDO / Oxy Investment Committee evaluation</p>
+        <p><strong>Next Review:</strong> Upon completion of technical pilot program</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>
