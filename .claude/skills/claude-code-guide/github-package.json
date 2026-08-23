@@ -1,0 +1,161 @@
+{
+  "name": "claude-code-guide",
+  "version": "1.0.0",
+  "description": "Comprehensive Claude Code beginner's guide - 24+ hours of structured learning",
+  "keywords": [
+    "claude",
+    "claude-code",
+    "guide",
+    "tutorial",
+    "productivity",
+    "prompting",
+    "ai",
+    "learning"
+  ],
+  "author": "@SamiBizConsult",
+  "contributors": [
+    {
+      "name": "Claude Code Community",
+      "url": "https://github.com/anthropics/claude-code"
+    }
+  ],
+  "license": "CC-BY-4.0",
+  "homepage": "https://github.com/yourusername/claude-code-guide",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/claude-code-guide.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/claude-code-guide/issues"
+  },
+  "files": [
+    "skills/",
+    "examples/",
+    "resources/",
+    "translations/",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "validate": "node scripts/validate.js",
+    "generate-toc": "node scripts/generate-toc.js",
+    "build": "npm run validate && npm run generate-toc",
+    "test": "npm run build"
+  },
+  "structure": {
+    "skills": {
+      "01-is-it-for-you": "Assessment and resource identification",
+      "02-setup": "Configuration and getting started",
+      "03-the-prompt": "Prompting techniques and strategies",
+      "04-unlearn": "Advanced concepts and mastery"
+    },
+    "examples": {
+      "prompt-templates": "Ready-to-use prompt templates",
+      "workflow-examples": "Real-world workflow examples",
+      "case-studies": "Success stories and learnings"
+    },
+    "resources": {
+      "keyboard-shortcuts": "Keyboard shortcut reference",
+      "troubleshooting": "Common issues and solutions",
+      "glossary": "Key terms and definitions"
+    },
+    "translations": {
+      "ar": "Arabic (عربي) translations"
+    }
+  },
+  "metadata": {
+    "totalHours": 24,
+    "difficulty": ["beginner", "intermediate", "advanced"],
+    "languages": ["en", "ar"],
+    "lastUpdated": "2024",
+    "version": "1.0.0"
+  },
+  "skills": [
+    {
+      "id": "is-it-for-you",
+      "name": "Is Claude Code For You?",
+      "description": "Determine if Claude Code fits your needs",
+      "duration": "5 minutes",
+      "difficulty": "beginner",
+      "path": "skills/is-it-for-you.md"
+    },
+    {
+      "id": "setup",
+      "name": "Setup",
+      "description": "Get Claude Code configured",
+      "duration": "5 minutes",
+      "difficulty": "beginner",
+      "path": "skills/setup.md",
+      "prerequisites": ["is-it-for-you"]
+    },
+    {
+      "id": "the-prompt",
+      "name": "The One Prompt You Need",
+      "description": "Master prompting techniques",
+      "duration": "30 minutes",
+      "difficulty": "intermediate",
+      "path": "skills/the-prompt.md",
+      "prerequisites": ["setup"]
+    },
+    {
+      "id": "unlearn",
+      "name": "Unlearn",
+      "description": "Advanced concepts and mastery",
+      "duration": "1-2 weeks practice",
+      "difficulty": "advanced",
+      "path": "skills/unlearn.md",
+      "prerequisites": ["the-prompt"]
+    }
+  ],
+  "learningPaths": {
+    "quickStart": {
+      "name": "Quick Start (30 minutes)",
+      "description": "Get up and running quickly",
+      "skills": ["is-it-for-you", "setup", "the-prompt"],
+      "estimatedTime": "40 minutes"
+    },
+    "complete": {
+      "name": "Complete Mastery (ongoing)",
+      "description": "Full learning journey",
+      "skills": ["is-it-for-you", "setup", "the-prompt", "unlearn"],
+      "estimatedTime": "24+ hours"
+    }
+  },
+  "features": {
+    "interactive": true,
+    "examples": true,
+    "templates": true,
+    "translations": true,
+    "codeSnippets": true,
+    "checklists": true,
+    "troubleshooting": true
+  },
+  "social": {
+    "twitter": "@SamiBizConsult",
+    "github": "SamiBizConsult",
+    "website": "https://sambiz.com"
+  },
+  "tags": [
+    "claude",
+    "ai",
+    "productivity",
+    "learning",
+    "guide",
+    "tutorial",
+    "prompt-engineering",
+    "development",
+    "cowork",
+    "artifact",
+    "automation"
+  ],
+  "relatedProjects": [
+    {
+      "name": "Claude Code",
+      "url": "https://claude.ai/code"
+    },
+    {
+      "name": "Anthropic Claude",
+      "url": "https://claude.ai"
+    }
+  ]
+}
