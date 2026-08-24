@@ -1,0 +1,384 @@
+# IHP Oman DeerFlow Configuration
+# Optimized for RFQ-to-cash workflow and VDP recovery
+# Created: August 24, 2026
+
+# ============================================================================
+# LLM MODELS
+# ============================================================================
+models:
+  # Orchestrator: Complex decision-making
+  - name: claude-opus-5
+    display_name: "Claude Opus 5 (Orchestrator)"
+    use: langchain_openai:ChatOpenAI
+    model: claude-opus-5
+    max_tokens: 4096
+    api_key: $ANTHROPIC_API_KEY
+    timeout_seconds: 60
+
+  # Specialist Agents: Faster, cost-effective
+  - name: claude-sonnet-5
+    display_name: "Claude Sonnet 5 (Agents)"
+    use: langchain_openai:ChatOpenAI
+    model: claude-sonnet-5
+    max_tokens: 2048
+    api_key: $ANTHROPIC_API_KEY
+    timeout_seconds: 45
+
+# ============================================================================
+# WEB SEARCH (Optional - for market research if needed)
+# ============================================================================
+web_search:
+  enabled: true
+  provider: tavily
+  api_key: $TAVILY_API_KEY
+  max_results: 10
+  search_depth: basic
+
+# ============================================================================
+# SANDBOX CONFIGURATION
+# ============================================================================
+sandbox:
+  use: deerflow.community.aio_sandbox:AioSandboxProvider
+  mode: docker
+  max_concurrent: 3
+  timeout_seconds: 300
+
+# ============================================================================
+# DATABASE CONFIGURATION
+# ============================================================================
+database:
+  backend: sqlite
+  path: .deer-flow/ihp_oman.db
+
+  # Checkpoint configuration for agent state
+  checkpoint_channel_mode: delta
+  checkpoint_delta:
+    snapshot_frequency: 10
+
+  # Optional cache for performance
+  checkpoint_cache:
+    type: memory
+    max_entries: 0
+
+# ============================================================================
+# SUB-AGENTS CONFIGURATION
+# ============================================================================
+subagents:
+  # Maximum concurrent agents per run
+  max_total_per_run: 5
+
+  # Individual agent timeouts
+  agent_timeout_seconds: 300
+
+  # Agent definitions for IHP Oman
+  definitions:
+    # RFQ Handler - Monitor portals, log RFQs
+    rfq-handler:
+      model: claude-sonnet-5
+      description: "Monitor RFQ portals, log tender enquiries, forward to principals"
+      tools:
+        - portal_monitoring
+        - email_routing
+        - database_write
+      max_iterations: 10
+
+    # Principal Coordinator - Manage technical queries
+    principal-coordinator:
+      model: claude-sonnet-5
+      description: "Manage technical queries, compile quotations, submit bids"
+      tools:
+        - email_coordination
+        - spreadsheet_compilation
+        - document_generation
+      max_iterations: 8
+
+    # Compliance Manager - VDRL, NCR tracking
+    compliance-manager:
+      model: claude-sonnet-5
+      description: "Track VDRL, manage RFI, monitor NCRs through closure"
+      tools:
+        - document_tracking
+        - inspection_coordination
+        - audit_management
+      max_iterations: 8
+
+    # VDP Tracker - CRITICAL delivery performance
+    vdp-tracker:
+      model: claude-opus-5  # More capable for critical calculations
+      description: "Monitor delivery performance, prevent VDP slippage"
+      tools:
+        - vdp_calculation
+        - delivery_tracking
+        - pdo_report_generation
+      max_iterations: 10
+
+    # Collections Handler - Receivables & payables
+    collections-handler:
+      model: claude-sonnet-5
+      description: "Manage invoicing, track collections, respond to SOAs"
+      tools:
+        - invoice_tracking
+        - payment_monitoring
+        - soa_response
+      max_iterations: 6
+
+    # Orchestrator - Coordinate all agents
+    orchestrator:
+      model: claude-opus-5  # Premium for complex coordination
+      description: "Coordinate agents, make escalation decisions, keep leadership informed"
+      tools:
+        - agent_coordination
+        - escalation_routing
+        - daily_reporting
+      max_iterations: 12
+
+# ============================================================================
+# LOGGING & MONITORING
+# ============================================================================
+logging:
+  level: INFO
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: ".deer-flow/logs/agent.log"
+
+  # Optional: LangSmith for advanced tracing
+  langsmith:
+    enabled: false
+    api_key: $LANGSMITH_API_KEY
+    project: "ihp-oman"
+
+# ============================================================================
+# SECURITY & ACCESS CONTROL
+# ============================================================================
+security:
+  # Allow file operations for document generation
+  allow_file_write: true
+  allow_file_read: true
+
+  # No bash execution needed (safer)
+  allow_bash: false
+
+  # Require human approval for sensitive operations
+  require_human_approval: false
+
+  # Email security
+  email_security:
+    scan_attachments: true
+    warn_external: true
+
+# ============================================================================
+# OPERATOR CONFIGURATION (IHP Oman's Key Accounts)
+# ============================================================================
+operators:
+  pdo:
+    name: "Petroleum Development Oman"
+    code: "106883"  # IHP's PDO vendor code
+    priority: "critical"  # Highest priority (VDP risk)
+    vdp_threshold: 90.0
+    vdp_current: 68.96
+
+  oq8:
+    name: "OQ / OQ8"
+    priority: "high"
+    vdp_threshold: 85.0
+
+  bp:
+    name: "bp Oman"
+    priority: "high"
+
+  shell:
+    name: "Shell Oman"
+    priority: "high"
+
+  marsa_lng:
+    name: "Marsa LNG"
+    priority: "medium"
+
+  medco:
+    name: "MEDCO LLC"
+    priority: "medium"
+
+  tatweer:
+    name: "Tatweer / Business Gateways"
+    priority: "medium"
+
+# ============================================================================
+# PRINCIPAL CONFIGURATION (IHP Oman's Suppliers)
+# ============================================================================
+principals:
+  autocontrol:
+    name: "Autocontrol Process Instrumentation"
+    location: "India/UAE"
+    specialties:
+      - "Flow instruments"
+      - "Level instruments"
+      - "Pressure instruments"
+    payment_terms: 30  # days
+    communication_style: "formal"
+
+  kam:
+    name: "KAM"
+    location: "USA"
+    specialties:
+      - "Water-cut meters (OWD)"
+      - "Flow measurement"
+    payment_terms: 45  # days
+
+  terranova:
+    name: "Terranova Instruments"
+    location: "Global"
+    specialties:
+      - "General instrumentation"
+    payment_terms: 30  # days
+    compliance_heavy: true  # Subject to PDO audits
+
+# ============================================================================
+# COMMUNICATION SETTINGS
+# ============================================================================
+communication:
+  email:
+    # Primary mailboxes for IHP Oman
+    outbound_from: "Sr.Sales@ihpoman.com"
+    secondary: "Sales@ihpoman.com"
+    signature: |
+      Best Regards
+      Sales Team
+      Sr.Sales@ihpoman.com | Sales@ihpoman.com · www.ihpoman.com
+
+    # Response time expectations
+    same_day_response: true
+    response_timeout_hours: 24
+
+  tone:
+    style: "formal but warm"
+    brevity: "short, specific emails preferred"
+    reference_numbers: "critical - always carry RFX#, IHP RFQ#, PO#"
+
+# ============================================================================
+# BUSINESS RULES & THRESHOLDS
+# ============================================================================
+business_rules:
+  # RFQ Management
+  rfq:
+    max_days_to_log: 0  # Log same day
+    max_days_to_forward: 0  # Forward same day
+    max_days_to_respond: 1  # Respond by next day (BCD is hard deadline)
+
+  # Pricing
+  pricing:
+    standard_margin_percent: 15  # IHP standard margin
+    min_margin_percent: 12
+    max_margin_percent: 25
+
+  # Delivery Performance (VDP - CRITICAL)
+  vdp:
+    pdo_threshold: 90.0
+    alert_threshold: 75.0  # Alert if trending below this
+    critical_threshold: 65.0  # Escalate to MD if below this
+    tracking_period_months: 12
+
+  # Collections
+  collections:
+    invoice_follow_up_days: 30  # Send reminder at 30 days
+    escalation_days: 60  # Escalate to Deepak at 60 days
+    critical_days: 90  # Escalate to MD at 90 days
+
+    # SOA response requirement
+    soa_response_time_hours: 24  # Same-day response expected
+
+  # Compliance
+  compliance:
+    rfi_notice_period_oman_days: 7  # Minimum notice for inspections in Oman
+    rfi_notice_period_overseas_days: 14  # Minimum notice for overseas inspections
+    ncr_tracking_required: true
+    vdrl_tracking_required: true
+
+# ============================================================================
+# ESCALATION RULES
+# ============================================================================
+escalation:
+  # Route to Deepak Kotemane (Manager – Sales & Services)
+  deepak:
+    - vdp_delivery_slip  # Any PDO PO late
+    - rfq_missed_bcd  # RFQ approaching BCD with no response
+    - principal_delayed_response  # TQ response >48 hours
+    - ncr_stalled_7days  # NCR open >7 days
+    - customer_payment_60days  # Invoice >60 days overdue
+    - soa_unanswered_24hours  # Principal SOA unanswered
+
+  # Route to Hamed Al Harmali (Managing Director)
+    hamed:
+    - vdp_critical  # VDP trending <75%
+    - new_principal_opportunity  # New principal registration
+    - pricing_authority_exceeded  # Discount >20%
+    - relationship_at_risk  # Major account dispute
+    - compliance_issue  # Legal/regulatory risk
+    - substantial_revenue_impact  # Deal >$500K at risk
+
+# ============================================================================
+# PERFORMANCE TARGETS (Month 6)
+# ============================================================================
+targets:
+  vdp:
+    percentage: 90.0
+    improvement_from_baseline: 21.04  # From 68.96% to 90%
+
+  rfq_response_rate:
+    percentage: 100  # Every RFx gets bid or regret
+
+  document_compliance:
+    percentage: 100  # Zero overdue VDRL items
+
+  bot_report:
+    on_time_percentage: 100  # Never late or wrong
+
+  collections:
+    soa_response_time_hours: 24
+    same_day_response_percentage: 95
+
+  operational_efficiency:
+    deepak_hours_freed_per_week: 12  # Conservative
+    new_hire_ramp_reduction_percent: 50
+
+# ============================================================================
+# FEATURE FLAGS
+# ============================================================================
+features:
+  # Portal integrations (can be enabled as needed)
+  pdo_rabithah_integration: false  # Optional: Enable if portal access available
+  tatweer_portal_integration: false  # Optional: Enable if portal access available
+
+  # Email integration (optional automation)
+  outlook_integration: false  # Optional: Enable for automatic email routing
+
+  # Compliance automations
+  vdrl_auto_tracking: true  # Always enabled
+  ncr_auto_tracking: true  # Always enabled
+  rfi_auto_validation: true  # Always enabled
+
+  # Reporting
+  daily_brief_email: true
+  weekly_vdp_report: true
+  monthly_metrics: true
+
+# ============================================================================
+# DEVELOPMENT & DEBUG
+# ============================================================================
+development:
+  debug_mode: false
+  verbose_logging: false
+  trace_agent_decisions: true
+  save_agent_outputs: true
+  output_dir: ".deer-flow/agent_outputs"
+
+# ============================================================================
+# NOTES
+# ============================================================================
+# Notes:
+# 1. VDP is the PRIMARY METRIC — all agents are optimized to improve VDP
+# 2. PDO is the CRITICAL ACCOUNT — 68.96% VDP at risk of relationship loss
+# 3. Deepak is the point person for day-to-day operations
+# 4. Hamed stays informed on strategic/critical issues
+# 5. System is designed to be autonomous but with clear escalation paths
+# 6. Reference numbers (RFX#, IHP RFQ#, PO#) are sacred — never drop them
+# 7. Same-day responses are the norm, not the exception
+# 8. This configuration assumes deployment with Claude Opus + Sonnet models

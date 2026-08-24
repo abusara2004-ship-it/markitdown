@@ -1,0 +1,412 @@
+{
+  "version": "1.0",
+  "created": "2026-08-24",
+  "description": "IHP Oman Multi-Agent System - Skills & Integration Configuration",
+
+  "skills": {
+    "enabled_skills": [
+      "rfq-monitor",
+      "principal-coordination",
+      "compliance-tracking",
+      "vdp-analysis",
+      "collections-management"
+    ],
+
+    "skill_packages": {
+      "rfq-monitor": {
+        "enabled": true,
+        "version": "1.0",
+        "author": "IHP Oman",
+        "description": "Monitor RFQ portals (PDO Rabithah, Tatweer, Business Gateways), log tenders, forward to principals",
+        "tools": [
+          "web_portal_monitor",
+          "email_receiver",
+          "database_logger",
+          "calendar_alerts"
+        ],
+        "config": {
+          "check_interval_minutes": 30,
+          "bcd_alert_days_before": 3,
+          "portals": {
+            "pdo_rabithah": false,
+            "tatweer_business_gateways": false,
+            "direct_email": true
+          }
+        }
+      },
+
+      "principal-coordination": {
+        "enabled": true,
+        "version": "1.0",
+        "description": "Manage technical queries, track quotation responses, compile and submit bids",
+        "tools": [
+          "email_threader",
+          "tq_tracker",
+          "quotation_compiler",
+          "document_attachment_handler"
+        ],
+        "config": {
+          "tq_response_timeout_hours": 48,
+          "quotation_submission_buffer_hours": 24,
+          "track_revision_rounds": true
+        }
+      },
+
+      "compliance-tracking": {
+        "enabled": true,
+        "version": "1.0",
+        "description": "Track VDRL (Vendor Document Requirement Lists), manage RFI (Request for Inspection), monitor NCR (Non-Conformance Reports)",
+        "tools": [
+          "document_tracker",
+          "rfi_coordinator",
+          "ncr_monitor",
+          "third_party_inspection_scheduler"
+        ],
+        "config": {
+          "vdrl_auto_tracking": true,
+          "ncr_auto_tracking": true,
+          "rfi_notice_period_oman_days": 7,
+          "rfi_notice_period_overseas_days": 14,
+          "ncr_max_open_days": 14
+        }
+      },
+
+      "vdp-analysis": {
+        "enabled": true,
+        "version": "1.0",
+        "priority": "critical",
+        "description": "Monitor delivery performance (VDP), calculate trailing 12-month average, generate PDO BOT Expediting Report",
+        "tools": [
+          "delivery_tracker",
+          "vdp_calculator",
+          "bot_report_generator",
+          "delivery_alert_system"
+        ],
+        "config": {
+          "tracking_period_months": 12,
+          "pdo_threshold_percent": 90.0,
+          "alert_threshold_percent": 75.0,
+          "critical_threshold_percent": 65.0,
+          "bot_report_due_days": 5,
+          "bot_report_template": "PDO_2026_standard",
+          "delivery_slip_alert_days": 5,
+          "escalate_immediately_on_red_alert": true
+        }
+      },
+
+      "collections-management": {
+        "enabled": true,
+        "version": "1.0",
+        "description": "Track receivables (invoices to customers), manage payables (SOA responses to principals), send reminders",
+        "tools": [
+          "invoice_tracker",
+          "payment_monitor",
+          "soa_responder",
+          "reminder_sender"
+        ],
+        "config": {
+          "invoice_follow_up_days": 30,
+          "escalation_days": 60,
+          "critical_days": 90,
+          "soa_response_time_hours": 24,
+          "reminder_severity": "high"
+        }
+      }
+    }
+  },
+
+  "integrations": {
+    "email": {
+      "enabled": false,
+      "provider": "outlook",
+      "description": "Integration with IHP Oman Outlook (optional, can be enabled later)",
+      "mailboxes": [
+        {
+          "address": "Sr.Sales@ihpoman.com",
+          "primary": true,
+          "action": "read_and_forward"
+        },
+        {
+          "address": "Sales@ihpoman.com",
+          "primary": false,
+          "action": "read_and_forward"
+        }
+      ],
+      "required_credential": "OUTLOOK_EMAIL, OUTLOOK_PASSWORD"
+    },
+
+    "spreadsheet": {
+      "enabled": false,
+      "provider": "google_sheets",
+      "description": "Sync with F03 PO Tracker spreadsheet (optional, can be enabled later)",
+      "config": {
+        "spreadsheet_id": "SET_YOUR_SHEET_ID",
+        "worksheets": [
+          "RFQ_Tracking",
+          "PO_Tracker",
+          "Collections"
+        ]
+      },
+      "required_credential": "GOOGLE_SHEETS_API_KEY"
+    },
+
+    "database": {
+      "enabled": true,
+      "provider": "sqlite",
+      "description": "Local SQLite database for all tracking (built-in, always enabled)",
+      "database_path": ".deer-flow/ihp_oman.db",
+      "tables": [
+        "rfq_tracking",
+        "po_tracking",
+        "vdp_tracking",
+        "collections_tracking",
+        "compliance_tracking"
+      ]
+    },
+
+    "portal": {
+      "pdo_rabithah": {
+        "enabled": false,
+        "description": "PDO Rabithah tender system (optional, requires portal credentials)",
+        "required_credentials": ["PDO_USERNAME", "PDO_PASSWORD"]
+      },
+
+      "tatweer_business_gateways": {
+        "enabled": false,
+        "description": "Tatweer/Business Gateways JSRS portal (optional, requires portal access)",
+        "required_credentials": ["TATWEER_EMAIL", "TATWEER_PASSWORD"]
+      }
+    }
+  },
+
+  "agents": {
+    "orchestrator": {
+      "enabled": true,
+      "model": "claude-opus-5",
+      "role": "Lead Orchestrator - Coordinates all agents",
+      "system_prompt_file": "agent_prompts/orchestrator.txt",
+      "responsibilities": [
+        "Coordinate RFQ Handler, Principal Coordinator, Compliance Manager, VDP Tracker, Collections Handler",
+        "Make escalation decisions (route to Deepak or Hamed)",
+        "Send daily brief to leadership",
+        "Monitor for critical alerts"
+      ],
+      "escalation_authority": ["deepak", "hamed"],
+      "tools_available": [
+        "agent_coordination",
+        "escalation_routing",
+        "daily_reporting",
+        "alert_system"
+      ]
+    },
+
+    "rfq-handler": {
+      "enabled": true,
+      "model": "claude-sonnet-5",
+      "role": "RFQ Handler - Portal monitoring and tender logging",
+      "system_prompt_file": "agent_prompts/rfq_handler.txt",
+      "responsibilities": [
+        "Monitor RFQ portals (PDO Rabithah, Tatweer, email)",
+        "Log all RFQs in F03 Tracker with IHP RFQ# assignment",
+        "Forward to appropriate principal within same day",
+        "Track BCD and escalate if no response",
+        "Send formal regret notice if IHP won't bid"
+      ],
+      "escalation_authority": ["deepak"],
+      "tools_available": [
+        "portal_monitoring",
+        "email_routing",
+        "database_write",
+        "calendar_alerts"
+      ],
+      "performance_metrics": {
+        "target_rfq_logging_time_hours": 0,
+        "target_principal_forward_time_hours": 0,
+        "target_rfq_miss_rate_percent": 0
+      }
+    },
+
+    "principal-coordinator": {
+      "enabled": true,
+      "model": "claude-sonnet-5",
+      "role": "Principal Coordinator - TQ management and quotation compilation",
+      "system_prompt_file": "agent_prompts/principal_coordinator.txt",
+      "responsibilities": [
+        "Monitor for Technical Queries (TQ-01, TQ-02, ...) from buyers",
+        "Forward TQs to principal, track responses",
+        "Compile principal's offer with IHP commercial terms",
+        "Submit quotation to operator before BCD",
+        "Track multi-round negotiations (TR1, TR2, ...)"
+      ],
+      "escalation_authority": ["deepak"],
+      "tools_available": [
+        "email_coordination",
+        "tq_tracker",
+        "quotation_compiler",
+        "document_handler"
+      ],
+      "performance_metrics": {
+        "target_tq_response_hours": 24,
+        "target_quotation_submission_hours_before_bcd": 24,
+        "target_accuracy_percent": 95
+      }
+    },
+
+    "compliance-manager": {
+      "enabled": true,
+      "model": "claude-sonnet-5",
+      "role": "Compliance Manager - Document and quality tracking",
+      "system_prompt_file": "agent_prompts/compliance_manager.txt",
+      "responsibilities": [
+        "Extract and track VDRL (Vendor Document Requirement List) for each PO",
+        "Manage RFI (Request for Inspection) scheduling and notice periods",
+        "Monitor NCR (Non-Conformance Report) progression to closure",
+        "Track TPI (Third-Party Inspection) approvals",
+        "Flag quality audit issues"
+      ],
+      "escalation_authority": ["deepak"],
+      "tools_available": [
+        "document_tracker",
+        "rfi_coordinator",
+        "ncr_monitor",
+        "tpi_scheduler"
+      ],
+      "performance_metrics": {
+        "target_vdrl_tracking_percent": 100,
+        "target_overdue_documents_count": 0,
+        "target_ncr_closure_days": 14
+      }
+    },
+
+    "vdp-tracker": {
+      "enabled": true,
+      "model": "claude-opus-5",
+      "role": "VDP Tracker - CRITICAL delivery performance monitoring",
+      "system_prompt_file": "agent_prompts/vdp_tracker.txt",
+      "priority": "critical",
+      "responsibilities": [
+        "Monitor every open PO line's delivery date",
+        "Calculate rolling 12-month VDP percentage",
+        "Flag delivery slips immediately (proactive alerts)",
+        "Generate PDO BOT Expediting Report automatically",
+        "Escalate if VDP trending below 75%"
+      ],
+      "escalation_authority": ["deepak", "hamed"],
+      "escalation_threshold": {
+        "yellow_alert_days_slip": 5,
+        "red_alert_days_slip": 10,
+        "vdp_escalate_to_hamed_percent": 75
+      },
+      "tools_available": [
+        "delivery_tracker",
+        "vdp_calculator",
+        "bot_report_generator",
+        "alert_system",
+        "escalation_routing"
+      ],
+      "performance_metrics": {
+        "target_vdp_percent": 90.0,
+        "current_vdp_percent": 68.96,
+        "bot_report_on_time_percent": 100,
+        "delivery_slip_detection_hours_before_due": 24
+      },
+      "business_impact": "EXISTENTIAL - PDO will reconsider doing business if VDP < 90%"
+    },
+
+    "collections-handler": {
+      "enabled": true,
+      "model": "claude-sonnet-5",
+      "role": "Collections Handler - Receivables and payables management",
+      "system_prompt_file": "agent_prompts/collections_handler.txt",
+      "responsibilities": [
+        "Send invoices at each project milestone",
+        "Track receivables (what customers owe IHP)",
+        "Monitor SOA (Statement of Account) from principals",
+        "Respond to SOA same-day with payment commitment",
+        "Send payment reminders (REMINDER-01, REMINDER-02)",
+        "Escalate overdue payments"
+      ],
+      "escalation_authority": ["deepak", "hamed"],
+      "tools_available": [
+        "invoice_tracker",
+        "payment_monitor",
+        "soa_responder",
+        "reminder_sender"
+      ],
+      "performance_metrics": {
+        "target_soa_response_time_hours": 24,
+        "target_same_day_response_percent": 95,
+        "target_overdue_payments_30days_count": 0,
+        "target_cash_flow_improvement_percent": 15
+      }
+    }
+  },
+
+  "system_configuration": {
+    "notification_channels": {
+      "email": {
+        "enabled": true,
+        "send_to": "Hamed.h@ihpoman.com",
+        "cc_on_critical": ["Sr.Sales@ihpoman.com"]
+      },
+      "sms": {
+        "enabled": false,
+        "phone": "+968 9947 0222"
+      },
+      "slack": {
+        "enabled": false,
+        "webhook_url": "SET_YOUR_SLACK_WEBHOOK"
+      }
+    },
+
+    "reporting": {
+      "daily_brief": {
+        "enabled": true,
+        "time": "09:00",
+        "recipients": ["Hamed.h@ihpoman.com", "Sr.Sales@ihpoman.com"],
+        "content": ["critical_alerts", "at_risk_items", "vdp_status", "today_rfq_bcds"]
+      },
+
+      "weekly_vdp": {
+        "enabled": true,
+        "day": "monday",
+        "time": "10:00",
+        "recipients": ["Hamed.h@ihpoman.com"],
+        "content": ["vdp_trend", "contributing_factors", "at_risk_accounts"]
+      },
+
+      "monthly_metrics": {
+        "enabled": true,
+        "day": 1,
+        "time": "08:00",
+        "recipients": ["Hamed.h@ihpoman.com"],
+        "content": ["all_metrics", "time_savings", "business_impact"]
+      }
+    }
+  },
+
+  "deployment_status": {
+    "phase": 1,
+    "setup_complete": false,
+    "testing_complete": false,
+    "pilot_complete": false,
+    "production_ready": false
+  },
+
+  "success_targets": {
+    "month_1": {
+      "vdp_target_percent": 70,
+      "rfq_miss_rate_target_percent": 0,
+      "agent_stability_percent": 95
+    },
+    "month_3": {
+      "vdp_target_percent": 80,
+      "rfq_response_rate_percent": 100,
+      "document_compliance_percent": 100
+    },
+    "month_6": {
+      "vdp_target_percent": 90,
+      "all_metrics_green": true
+    }
+  }
+}
