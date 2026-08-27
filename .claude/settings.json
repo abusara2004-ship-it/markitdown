@@ -1,0 +1,42 @@
+{
+  "name": "Markitdown - 9 Claude Skills Workspace",
+  "description": "Personal prompt-writing workflow with 9 reusable skills for crafting, refining, and packaging prompts.",
+  "skills": [
+    {
+      "name": "promptamaker",
+      "path": "skills/01-promptamaker"
+    },
+    {
+      "name": "fitme",
+      "path": "skills/02-fitme"
+    },
+    {
+      "name": "howto",
+      "path": "skills/03-howto"
+    },
+    {
+      "name": "optimizer",
+      "path": "skills/04-optimizer"
+    },
+    {
+      "name": "table-prompter",
+      "path": "skills/05-table-prompter"
+    },
+    {
+      "name": "eventual-voice",
+      "path": "skills/06-eventual-voice"
+    },
+    {
+      "name": "auraai",
+      "path": "skills/07-auraai"
+    },
+    {
+      "name": "writeaskill",
+      "path": "skills/08-writeaskill"
+    },
+    {
+      "name": "handon",
+      "path": "skills/09-handon"
+    }
+  ]
+}
