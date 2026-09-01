@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "markitdown": {
+      "command": "python",
+      "args": ["-m", "markitdown_mcp"]
+    }
+  }
+}
