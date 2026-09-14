@@ -1,0 +1,498 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">
+ <Styles>
+  <Style ss:ID="Default" ss:Name="Normal">
+   <Alignment ss:Vertical="Center"/>
+   <Font ss:FontName="Arial" ss:Size="11"/>
+  </Style>
+  <Style ss:ID="Title">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:WrapText="1"/>
+   <Font ss:FontName="Arial" ss:Size="14" ss:Bold="1" ss:Color="#FFFFFF"/>
+   <Interior ss:Color="#1F4E78" ss:Pattern="Solid"/>
+  </Style>
+  <Style ss:ID="Subtitle">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:WrapText="1"/>
+   <Font ss:FontName="Arial" ss:Size="11" ss:Color="#1F4E78"/>
+   <Interior ss:Color="#D9E1F2" ss:Pattern="Solid"/>
+  </Style>
+  <Style ss:ID="SummaryHeader">
+   <Alignment ss:Horizontal="Left" ss:Vertical="Center"/>
+   <Font ss:FontName="Arial" ss:Size="11" ss:Bold="1" ss:Color="#FFFFFF"/>
+   <Interior ss:Color="#385723" ss:Pattern="Solid"/>
+  </Style>
+  <Style ss:ID="SummaryLabel">
+   <Font ss:FontName="Arial" ss:Size="11" ss:Bold="1"/>
+   <Alignment ss:Horizontal="Left" ss:Vertical="Center"/>
+   <Interior ss:Color="#E2EFDA" ss:Pattern="Solid"/>
+  </Style>
+  <Style ss:ID="SummaryValue">
+   <Font ss:FontName="Arial" ss:Size="11" ss:Bold="1"/>
+   <Alignment ss:Horizontal="Right" ss:Vertical="Center"/>
+   <Interior ss:Color="#F2F2F2" ss:Pattern="Solid"/>
+   <NumberFormat ss:Format="#,##0.000"/>
+  </Style>
+  <Style ss:ID="OverdueValue">
+   <Font ss:FontName="Arial" ss:Size="11" ss:Bold="1" ss:Color="#FFFFFF"/>
+   <Alignment ss:Horizontal="Right" ss:Vertical="Center"/>
+   <Interior ss:Color="#C55A11" ss:Pattern="Solid"/>
+   <NumberFormat ss:Format="#,##0.000"/>
+  </Style>
+  <Style ss:ID="TableHeader">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:WrapText="1"/>
+   <Font ss:FontName="Arial" ss:Size="10" ss:Bold="1" ss:Color="#FFFFFF"/>
+   <Interior ss:Color="#4472C4" ss:Pattern="Solid"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+   </Borders>
+  </Style>
+  <Style ss:ID="DataCell">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+   <Font ss:FontName="Arial" ss:Size="10"/>
+   <NumberFormat ss:Format="#,##0.000"/>
+  </Style>
+  <Style ss:ID="Received">
+   <Alignment ss:Horizontal="Right" ss:Vertical="Center"/>
+   <Font ss:FontName="Arial" ss:Size="10"/>
+   <Interior ss:Color="#FFFF00" ss:Pattern="Solid"/>
+   <NumberFormat ss:Format="#,##0.000"/>
+  </Style>
+  <Style ss:ID="Balance">
+   <Alignment ss:Horizontal="Right" ss:Vertical="Center"/>
+   <Font ss:FontName="Arial" ss:Size="10" ss:Bold="1"/>
+   <Interior ss:Color="#FF6B6B" ss:Pattern="Solid"/>
+   <NumberFormat ss:Format="#,##0.000"/>
+  </Style>
+  <Style ss:ID="BalancePositive">
+   <Alignment ss:Horizontal="Right" ss:Vertical="Center"/>
+   <Font ss:FontName="Arial" ss:Size="10" ss:Bold="1"/>
+   <Interior ss:Color="#92D050" ss:Pattern="Solid"/>
+   <NumberFormat ss:Format="#,##0.000"/>
+  </Style>
+  <Style ss:ID="StatusPaid">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:WrapText="1"/>
+   <Font ss:FontName="Arial" ss:Size="9"/>
+   <Interior ss:Color="#92D050" ss:Pattern="Solid"/>
+  </Style>
+  <Style ss:ID="StatusPartial">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:WrapText="1"/>
+   <Font ss:FontName="Arial" ss:Size="9"/>
+   <Interior ss:Color="#FFC000" ss:Pattern="Solid"/>
+  </Style>
+  <Style ss:ID="StatusOverdue">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:WrapText="1"/>
+   <Font ss:FontName="Arial" ss:Size="9" ss:Bold="1"/>
+   <Interior ss:Color="#FF6B6B" ss:Pattern="Solid"/>
+  </Style>
+  <Style ss:ID="StatusFuture">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:WrapText="1"/>
+   <Font ss:FontName="Arial" ss:Size="9"/>
+   <Interior ss:Color="#D9E1F2" ss:Pattern="Solid"/>
+  </Style>
+  <Style ss:ID="Total">
+   <Font ss:FontName="Arial" ss:Size="11" ss:Bold="1" ss:Color="#FFFFFF"/>
+   <Alignment ss:Horizontal="Right" ss:Vertical="Center"/>
+   <Interior ss:Color="#1F4E78" ss:Pattern="Solid"/>
+   <NumberFormat ss:Format="#,##0.000"/>
+  </Style>
+  <Style ss:ID="Note">
+   <Alignment ss:Horizontal="Left" ss:Vertical="Top" ss:WrapText="1"/>
+   <Font ss:FontName="Arial" ss:Size="9" ss:Italic="1"/>
+  </Style>
+ </Styles>
+
+ <Worksheet ss:Name="AR Aging Report">
+  <Table ss:DefaultRowHeight="20">
+   <Column ss:Width="20"/>
+   <Column ss:Width="120"/>
+   <Column ss:Width="100"/>
+   <Column ss:Width="110"/>
+   <Column ss:Width="110"/>
+   <Column ss:Width="110"/>
+   <Column ss:Width="90"/>
+   <Column ss:Width="140"/>
+   <Column ss:Width="100"/>
+
+   <!-- Title -->
+   <Row ss:Height="32">
+    <Cell ss:MergedAcross="8" ss:StyleID="Title">
+     <Data ss:Type="String">ZAHIT ACCOUNTS RECEIVABLE (AR) AGING REPORT</Data>
+    </Cell>
+   </Row>
+
+   <!-- Subtitle -->
+   <Row ss:Height="28">
+    <Cell ss:MergedAcross="8" ss:StyleID="Subtitle">
+     <Data ss:Type="String">Rent &amp; Loan Payment Tracking | As of 7 February 2026</Data>
+    </Cell>
+   </Row>
+
+   <!-- Empty row -->
+   <Row ss:Height="5">
+    <Cell/>
+   </Row>
+
+   <!-- Summary Header -->
+   <Row ss:Height="24">
+    <Cell ss:MergedAcross="3" ss:StyleID="SummaryHeader">
+     <Data ss:Type="String">SUMMARY</Data>
+    </Cell>
+   </Row>
+
+   <!-- Summary Data -->
+   <Row ss:Height="22">
+    <Cell ss:StyleID="SummaryLabel"><Data ss:Type="String">Total Due (July 2025 - Mar 2026):</Data></Cell>
+    <Cell ss:StyleID="SummaryValue"><Data ss:Type="Number">16200</Data></Cell>
+    <Cell ss:StyleID="SummaryValue"><Data ss:Type="String">OMR</Data></Cell>
+   </Row>
+
+   <Row ss:Height="22">
+    <Cell ss:StyleID="SummaryLabel"><Data ss:Type="String">Total Received (to date):</Data></Cell>
+    <Cell ss:StyleID="SummaryValue"><Data ss:Type="Number">9901</Data></Cell>
+    <Cell ss:StyleID="SummaryValue"><Data ss:Type="String">OMR</Data></Cell>
+   </Row>
+
+   <Row ss:Height="22">
+    <Cell ss:StyleID="SummaryLabel"><Data ss:Type="String">Outstanding Balance:</Data></Cell>
+    <Cell ss:StyleID="SummaryValue"><Data ss:Type="Number">6299</Data></Cell>
+    <Cell ss:StyleID="SummaryValue"><Data ss:Type="String">OMR</Data></Cell>
+   </Row>
+
+   <Row ss:Height="22">
+    <Cell ss:StyleID="SummaryLabel"><Data ss:Type="String">Overdue Arrears (Dec + Jan):</Data></Cell>
+    <Cell ss:StyleID="OverdueValue"><Data ss:Type="Number">1463</Data></Cell>
+    <Cell ss:StyleID="OverdueValue"><Data ss:Type="String">OMR</Data></Cell>
+   </Row>
+
+   <!-- Empty row -->
+   <Row ss:Height="10">
+    <Cell/>
+   </Row>
+
+   <!-- AR Aging Header -->
+   <Row ss:Height="28">
+    <Cell ss:MergedAcross="8" ss:StyleID="SummaryHeader">
+     <Data ss:Type="String">MONTH-BY-MONTH AR AGING</Data>
+    </Cell>
+   </Row>
+
+   <!-- Table Headers -->
+   <Row ss:Height="32">
+    <Cell ss:StyleID="TableHeader"><Data ss:Type="String">Month</Data></Cell>
+    <Cell ss:StyleID="TableHeader"><Data ss:Type="String">Due Date</Data></Cell>
+    <Cell ss:StyleID="TableHeader"><Data ss:Type="String">Due Amount (OMR)</Data></Cell>
+    <Cell ss:StyleID="TableHeader"><Data ss:Type="String">Received (OMR)</Data></Cell>
+    <Cell ss:StyleID="TableHeader"><Data ss:Type="String">Balance (OMR)</Data></Cell>
+    <Cell ss:StyleID="TableHeader"><Data ss:Type="String">Days Overdue</Data></Cell>
+    <Cell ss:StyleID="TableHeader"><Data ss:Type="String">Status</Data></Cell>
+    <Cell ss:StyleID="TableHeader"><Data ss:Type="String">Notes</Data></Cell>
+   </Row>
+
+   <!-- Data Rows -->
+   <Row ss:Height="24">
+    <Cell><Data ss:Type="String">July 2025</Data></Cell>
+    <Cell><Data ss:Type="String">31 Jul 2025</Data></Cell>
+    <Cell ss:StyleID="DataCell"><Data ss:Type="Number">1800</Data></Cell>
+    <Cell ss:StyleID="Received"><Data ss:Type="Number">1800</Data></Cell>
+    <Cell ss:StyleID="BalancePositive"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="DataCell"><Data ss:Type="Number">192</Data></Cell>
+    <Cell ss:StyleID="StatusPaid"><Data ss:Type="String">PAID</Data></Cell>
+    <Cell><Data ss:Type="String">Full payment received</Data></Cell>
+   </Row>
+
+   <Row ss:Height="24">
+    <Cell><Data ss:Type="String">August 2025</Data></Cell>
+    <Cell><Data ss:Type="String">31 Aug 2025</Data></Cell>
+    <Cell ss:StyleID="DataCell"><Data ss:Type="Number">1800</Data></Cell>
+    <Cell ss:StyleID="Received"><Data ss:Type="Number">1700</Data></Cell>
+    <Cell ss:StyleID="Balance"><Data ss:Type="Number">100</Data></Cell>
+    <Cell ss:StyleID="DataCell"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="StatusPartial"><Data ss:Type="String">PARTIAL</Data></Cell>
+    <Cell><Data ss:Type="String">Legacy - 100 OMR shortfall</Data></Cell>
+   </Row>
+
+   <Row ss:Height="24">
+    <Cell><Data ss:Type="String">September 2025</Data></Cell>
+    <Cell><Data ss:Type="String">30 Sep 2025</Data></Cell>
+    <Cell ss:StyleID="DataCell"><Data ss:Type="Number">1800</Data></Cell>
+    <Cell ss:StyleID="Received"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="Balance"><Data ss:Type="Number">1800</Data></Cell>
+    <Cell ss:StyleID="DataCell"><Data ss:Type="Number">130</Data></Cell>
+    <Cell ss:StyleID="StatusOverdue"><Data ss:Type="String">NOT PAID</Data></Cell>
+    <Cell><Data ss:Type="String">Credit application pending</Data></Cell>
+   </Row>
+
+   <Row ss:Height="24">
+    <Cell><Data ss:Type="String">October 2025</Data></Cell>
+    <Cell><Data ss:Type="String">31 Oct 2025</Data></Cell>
+    <Cell ss:StyleID="DataCell"><Data ss:Type="Number">1800</Data></Cell>
+    <Cell ss:StyleID="Received"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="Balance"><Data ss:Type="Number">1800</Data></Cell>
+    <Cell ss:StyleID="DataCell"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="StatusPartial"><Data ss:Type="String">PARTIAL - OVERPAID</Data></Cell>
+    <Cell><Data ss:Type="String">Credit applied - months contacted</Data></Cell>
+   </Row>
+
+   <Row ss:Height="24">
+    <Cell><Data ss:Type="String">November 2025</Data></Cell>
+    <Cell><Data ss:Type="String">30 Nov 2025</Data></Cell>
+    <Cell ss:StyleID="DataCell"><Data ss:Type="Number">1800</Data></Cell>
+    <Cell ss:StyleID="Received"><Data ss:Type="Number">1950</Data></Cell>
+    <Cell ss:StyleID="Balance"><Data ss:Type="Number">-150</Data></Cell>
+    <Cell ss:StyleID="DataCell"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="StatusPaid"><Data ss:Type="String">PAID (OVERPAID)</Data></Cell>
+    <Cell><Data ss:Type="String">150 OMR advance/credit</Data></Cell>
+   </Row>
+
+   <Row ss:Height="24">
+    <Cell><Data ss:Type="String">December 2025</Data></Cell>
+    <Cell><Data ss:Type="String">31 Dec 2025</Data></Cell>
+    <Cell ss:StyleID="DataCell"><Data ss:Type="Number">1800</Data></Cell>
+    <Cell ss:StyleID="Received"><Data ss:Type="Number">1800</Data></Cell>
+    <Cell ss:StyleID="Balance"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="DataCell"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="StatusPaid"><Data ss:Type="String">PAID (ADVANCE)</Data></Cell>
+    <Cell><Data ss:Type="String">Advance payment received</Data></Cell>
+   </Row>
+
+   <Row ss:Height="24">
+    <Cell><Data ss:Type="String">January 2026</Data></Cell>
+    <Cell><Data ss:Type="String">31 Jan 2026</Data></Cell>
+    <Cell ss:StyleID="DataCell"><Data ss:Type="Number">1700</Data></Cell>
+    <Cell ss:StyleID="Received"><Data ss:Type="Number">610</Data></Cell>
+    <Cell ss:StyleID="Balance"><Data ss:Type="Number">1090</Data></Cell>
+    <Cell ss:StyleID="DataCell"><Data ss:Type="Number">8</Data></Cell>
+    <Cell ss:StyleID="StatusOverdue"><Data ss:Type="String">PARTIAL - OVERDUE</Data></Cell>
+    <Cell><Data ss:Type="String">Advance computer (610) + renewal</Data></Cell>
+   </Row>
+
+   <Row ss:Height="24">
+    <Cell><Data ss:Type="String">February 2026</Data></Cell>
+    <Cell><Data ss:Type="String">28 Feb 2026</Data></Cell>
+    <Cell ss:StyleID="DataCell"><Data ss:Type="Number">1700</Data></Cell>
+    <Cell ss:StyleID="Received"><Data ss:Type="Number">1500</Data></Cell>
+    <Cell ss:StyleID="Balance"><Data ss:Type="Number">200</Data></Cell>
+    <Cell ss:StyleID="DataCell"><Data ss:Type="Number">7</Data></Cell>
+    <Cell ss:StyleID="StatusOverdue"><Data ss:Type="String">PARTIAL - OVERDUE</Data></Cell>
+    <Cell><Data ss:Type="String">200 OMR outstanding</Data></Cell>
+   </Row>
+
+   <Row ss:Height="24">
+    <Cell><Data ss:Type="String">March 2026</Data></Cell>
+    <Cell><Data ss:Type="String">31 Mar 2026</Data></Cell>
+    <Cell ss:StyleID="DataCell"><Data ss:Type="Number">1700</Data></Cell>
+    <Cell ss:StyleID="Received"><Data ss:Type="Number">1700</Data></Cell>
+    <Cell ss:StyleID="BalancePositive"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:StyleID="DataCell"><Data ss:Type="Number">-21</Data></Cell>
+    <Cell ss:StyleID="StatusFuture"><Data ss:Type="String">DUE SOON</Data></Cell>
+    <Cell><Data ss:Type="String">Monitor ahead of due date</Data></Cell>
+   </Row>
+
+   <!-- Totals Row -->
+   <Row ss:Height="24">
+    <Cell ss:StyleID="Total"><Data ss:Type="String">TOTALS</Data></Cell>
+    <Cell ss:StyleID="Total"/>
+    <Cell ss:StyleID="Total"><Data ss:Type="Number">15900</Data></Cell>
+    <Cell ss:StyleID="Total"><Data ss:Type="Number">11060</Data></Cell>
+    <Cell ss:StyleID="Total"><Data ss:Type="Number">4840</Data></Cell>
+    <Cell ss:StyleID="Total"/>
+    <Cell ss:StyleID="Total"/>
+    <Cell ss:StyleID="Total"/>
+   </Row>
+
+   <!-- Empty rows -->
+   <Row ss:Height="15">
+    <Cell/>
+   </Row>
+
+   <!-- Collection Priority -->
+   <Row ss:Height="24">
+    <Cell ss:MergedAcross="8" ss:StyleID="SummaryHeader">
+     <Data ss:Type="String">IMMEDIATE COLLECTION PRIORITY</Data>
+    </Cell>
+   </Row>
+
+   <Row ss:Height="20">
+    <Cell ss:StyleID="SummaryLabel"><Data ss:Type="String">1. January 2026 Overdue:</Data></Cell>
+    <Cell ss:StyleID="SummaryValue"><Data ss:Type="Number">1090</Data></Cell>
+    <Cell ss:StyleID="SummaryValue"><Data ss:Type="String">OMR</Data></Cell>
+    <Cell><Data ss:Type="String">- 8 days overdue</Data></Cell>
+   </Row>
+
+   <Row ss:Height="20">
+    <Cell ss:StyleID="SummaryLabel"><Data ss:Type="String">2. February 2026 Overdue:</Data></Cell>
+    <Cell ss:StyleID="SummaryValue"><Data ss:Type="Number">200</Data></Cell>
+    <Cell ss:StyleID="SummaryValue"><Data ss:Type="String">OMR</Data></Cell>
+    <Cell><Data ss:Type="String">- 7 days overdue</Data></Cell>
+   </Row>
+
+   <Row ss:Height="20">
+    <Cell ss:StyleID="SummaryLabel"><Data ss:Type="String">3. August 2025 Legacy Shortfall:</Data></Cell>
+    <Cell ss:StyleID="SummaryValue"><Data ss:Type="Number">100</Data></Cell>
+    <Cell ss:StyleID="SummaryValue"><Data ss:Type="String">OMR</Data></Cell>
+    <Cell><Data ss:Type="String">- Requires follow-up</Data></Cell>
+   </Row>
+
+   <!-- Notes Section -->
+   <Row ss:Height="10">
+    <Cell/>
+   </Row>
+
+   <Row ss:Height="24">
+    <Cell ss:MergedAcross="8" ss:StyleID="SummaryHeader">
+     <Data ss:Type="String">KEY NOTES &amp; REFERENCE TRANSACTIONS</Data>
+    </Cell>
+   </Row>
+
+   <Row ss:Height="28" ss:StyleID="Note">
+    <Cell ss:MergedAcross="8"><Data ss:Type="String">• Advance Computer: 610 OMR (January 2026 payment) + 200 OMR engine renewal documented in source notes
+• Not Paid December + January: Partial payments only; renewal payments made in phases (200 OMR increments)
+• 520 OMR Engine Renewal: Documented separately in transaction notes; included in January payment breakdown
+• Data compiled from statement tracking (July 2025 - March 2026) and transaction verification notes
+• All amounts in Omani Rial (OMR)</Data></Cell>
+   </Row>
+
+  </Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <FreezePanes/>
+   <FrozenNoSplit/>
+   <SplitHorizontal>10</SplitHorizontal>
+   <TopRowBottomPane>10</TopRowBottomPane>
+  </WorksheetOptions>
+ </Worksheet>
+
+ <Worksheet ss:Name="Transaction Details">
+  <Table ss:DefaultRowHeight="20">
+   <Column ss:Width="150"/>
+   <Column ss:Width="100"/>
+   <Column ss:Width="120"/>
+   <Column ss:Width="200"/>
+
+   <Row ss:Height="28">
+    <Cell ss:MergedAcross="3" ss:StyleID="Title">
+     <Data ss:Type="String">TRANSACTION DETAILS &amp; SOURCE DOCUMENTATION</Data>
+    </Cell>
+   </Row>
+
+   <Row ss:Height="24">
+    <Cell ss:StyleID="TableHeader"><Data ss:Type="String">Date / Period</Data></Cell>
+    <Cell ss:StyleID="TableHeader"><Data ss:Type="String">Amount (OMR)</Data></Cell>
+    <Cell ss:StyleID="TableHeader"><Data ss:Type="String">Type</Data></Cell>
+    <Cell ss:StyleID="TableHeader"><Data ss:Type="String">Description / Notes</Data></Cell>
+   </Row>
+
+   <!-- Handwritten Notes Transactions -->
+   <Row ss:Height="20">
+    <Cell><Data ss:Type="String">August 2025</Data></Cell>
+    <Cell ss:StyleID="DataCell"><Data ss:Type="Number">1300</Data></Cell>
+    <Cell><Data ss:Type="String">Rent/Regular</Data></Cell>
+    <Cell><Data ss:Type="String">11/08 payment</Data></Cell>
+   </Row>
+
+   <Row ss:Height="20">
+    <Cell><Data ss:Type="String">August 2025</Data></Cell>
+    <Cell ss:StyleID="DataCell"><Data ss:Type="Number">500</Data></Cell>
+    <Cell><Data ss:Type="String">Additional</Data></Cell>
+    <Cell><Data ss:Type="String">25/8 payment (R.O)</Data></Cell>
+   </Row>
+
+   <Row ss:Height="20">
+    <Cell><Data ss:Type="String">August 2025</Data></Cell>
+    <Cell ss:StyleID="DataCell"><Data ss:Type="Number">200</Data></Cell>
+    <Cell><Data ss:Type="String">Partial</Data></Cell>
+    <Cell><Data ss:Type="String">27/8 - Advance Computer (200 R.O)</Data></Cell>
+   </Row>
+
+   <Row ss:Height="20">
+    <Cell><Data ss:Type="String">September 2025</Data></Cell>
+    <Cell ss:StyleID="DataCell"><Data ss:Type="Number">1700</Data></Cell>
+    <Cell><Data ss:Type="String">Payment</Data></Cell>
+    <Cell><Data ss:Type="String">16/09 - 1700/210 documented</Data></Cell>
+   </Row>
+
+   <Row ss:Height="20">
+    <Cell><Data ss:Type="String">September 2025</Data></Cell>
+    <Cell ss:StyleID="DataCell"><Data ss:Type="Number">107</Data></Cell>
+    <Cell><Data ss:Type="String">Partial</Data></Cell>
+    <Cell><Data ss:Type="String">17/09 - 107 R.O payment</Data></Cell>
+   </Row>
+
+   <Row ss:Height="20">
+    <Cell><Data ss:Type="String">October 2025</Data></Cell>
+    <Cell ss:StyleID="DataCell"><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="String">Pending</Data></Cell>
+    <Cell><Data ss:Type="String">No recorded payments - November advance applied</Data></Cell>
+   </Row>
+
+   <Row ss:Height="22">
+    <Cell><Data ss:Type="String">November 2025 (2nd)</Data></Cell>
+    <Cell ss:StyleID="DataCell"><Data ss:Type="Number">107</Data></Cell>
+    <Cell><Data ss:Type="String">Carryover</Data></Cell>
+    <Cell><Data ss:Type="String">107 R.O + 107R.O from Sept/Oct = 214 R.O total</Data></Cell>
+   </Row>
+
+   <Row ss:Height="22">
+    <Cell><Data ss:Type="String">November 2025</Data></Cell>
+    <Cell ss:StyleID="DataCell"><Data ss:Type="Number">100</Data></Cell>
+    <Cell><Data ss:Type="String">Payment</Data></Cell>
+    <Cell><Data ss:Type="String">100 R.O + 200 R.O (2nd Nov) = 300 R.O total</Data></Cell>
+   </Row>
+
+   <Row ss:Height="22">
+    <Cell><Data ss:Type="String">November 2025 (est.)</Data></Cell>
+    <Cell ss:StyleID="DataCell"><Data ss:Type="Number">2000</Data></Cell>
+    <Cell><Data ss:Type="String">Renewal</Data></Cell>
+    <Cell><Data ss:Type="String">2000 OMR + 400 R.O + 900 R.O = Engine Renewal costs</Data></Cell>
+   </Row>
+
+   <Row ss:Height="20">
+    <Cell><Data ss:Type="String">December 2025</Data></Cell>
+    <Cell ss:StyleID="DataCell"><Data ss:Type="Number">1800</Data></Cell>
+    <Cell><Data ss:Type="String">Advance</Data></Cell>
+    <Cell><Data ss:Type="String">Not Paid December + January - marked for tracking</Data></Cell>
+   </Row>
+
+   <Row ss:Height="20">
+    <Cell><Data ss:Type="String">January 2026</Data></Cell>
+    <Cell ss:StyleID="DataCell"><Data ss:Type="Number">610</Data></Cell>
+    <Cell><Data ss:Type="String">Computer</Data></Cell>
+    <Cell><Data ss:Type="String">Advance Computer payment - Eng(550) + 200 R.O</Data></Cell>
+   </Row>
+
+   <Row ss:Height="20">
+    <Cell><Data ss:Type="String">January 2026</Data></Cell>
+    <Cell ss:StyleID="DataCell"><Data ss:Type="Number">900</Data></Cell>
+    <Cell><Data ss:Type="String">Renewal</Data></Cell>
+    <Cell><Data ss:Type="String">Engine/Equipment renewal payment (900 OMR)</Data></Cell>
+   </Row>
+
+   <Row ss:Height="20">
+    <Cell><Data ss:Type="String">February 2026</Data></Cell>
+    <Cell ss:StyleID="DataCell"><Data ss:Type="Number">1500</Data></Cell>
+    <Cell><Data ss:Type="String">Partial</Data></Cell>
+    <Cell><Data ss:Type="String">200 R.O outstanding balance remains</Data></Cell>
+   </Row>
+
+   <Row ss:Height="20">
+    <Cell><Data ss:Type="String">March 2026</Data></Cell>
+    <Cell ss:StyleID="DataCell"><Data ss:Type="Number">1700</Data></Cell>
+    <Cell><Data ss:Type="String">Current</Data></Cell>
+    <Cell><Data ss:Type="String">Full payment for March period</Data></Cell>
+   </Row>
+
+  </Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <FreezePanes/>
+   <FrozenNoSplit/>
+   <SplitHorizontal>1</SplitHorizontal>
+   <TopRowBottomPane>1</TopRowBottomPane>
+  </WorksheetOptions>
+ </Worksheet>
+
+</Workbook>
