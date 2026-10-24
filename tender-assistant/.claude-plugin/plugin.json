@@ -1,0 +1,6 @@
+{
+  "name": "tender-assistant",
+  "version": "0.1.0",
+  "description": "Tender/RFQ compliance check, supplier notes and a live status pane for OEM and oil & gas proposals. Local files only.",
+  "types": "./types/index.d.ts"
+}
