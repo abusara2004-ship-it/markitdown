@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Café Daily Sheet OCR</title>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js"></script>
+<style>
+  :root {
+    --bg:#0f172a; --card:#1e293b; --line:#334155;
+    --text:#e2e8f0; --muted:#94a3b8; --accent:#22c55e; --warn:#f59e0b;
+  }
+  * { box-sizing:border-box; }
+  body {
+    margin:0; font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+    background:var(--bg); color:var(--text); padding:18px;
+  }
+  .wrap { max-width:1100px; margin:0 auto; }
+  h1 { margin:0 0 4px; font-size:26px; }
+  .sub { color:var(--muted); margin:0 0 18px; font-size:14px; }
+  .card {
+    background:var(--card); border:1px solid var(--line);
+    border-radius:14px; padding:16px; margin-bottom:16px;
+  }
+  .grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  @media (max-width:800px){ .grid { grid-template-columns:1fr; } }
+  label { display:block; font-size:13px; color:var(--muted); margin:10px 0 5px; }
+  input, select, textarea, button {
+    width:100%; font:inherit; color:var(--text);
+    background:#0b1220; border:1px solid var(--line); border-radius:10px; padding:10px;
+  }
+  textarea { min-height:230px; resize:vertical; line-height:1.5; }
+  button { cursor:pointer; border:none; font-weight:600; }
+  button:disabled { opacity:.5; cursor:not-allowed; }
+  .primary { background:var(--accent); color:#052e16; }
+  .secondary { background:#334155; color:var(--text); }
+  .danger { background:#7f1d1d; color:#fecaca; }
+  .row { display:flex; gap:10px; flex-wrap:wrap; }
+  .row > * { flex:1; }
+  .status { min-height:22px; font-size:14px; color:var(--muted); margin-top:10px; }
+  .preview {
+    width:100%; max-height:330px; object-fit:contain; border-radius:10px;
+    border:1px solid var(--line); background:#000; display:none;
+  }
+  .pill {
+    display:inline-block; padding:3px 9px; border-radius:999px;
+    background:#334155; font-size:12px; margin-right:6px;
+  }
+  .entry { border-top:1px solid var(--line); padding:10px 0; }
+  .entry:first-child { border-top:none; }
+  .entry h3 { margin:0 0 6px; font-size:15px; }
+  .entry pre {
+    white-space:pre-wrap; word-break:break-word; margin:0;
+    color:#cbd5e1; font-size:13px; max-height:130px; overflow:auto;
+  }
+  .toolbar { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+  .toolbar button { width:auto; padding:9px 13px; }
+  .hint { font-size:12px; color:var(--muted); margin-top:8px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Café Daily Sheet OCR</h1>
+  <p class="sub">Upload the supervisor’s handwritten end-of-day paper, improve it, extract the text, correct it, and save the daily record.</p>
+
+  <div class="card">
+    <div class="grid">
+      <div>
+        <label for="file">1. Choose or capture the paper</label>
+        <input id="file" type="file" accept="image/*" capture="environment" />
+        <img id="preview" class="preview" alt="Paper preview" />
+
+        <label for="scale">2. Resolution enhancement</label>
+        <select id="scale">
+          <option value="1">Original size</option>
+          <option value="1.5">1.5× — fast</option>
+          <option value="2" selected>2× — recommended</option>
+          <option value="3">3× — small/unclear writing</option>
+          <option value="4">4× — very small handwriting</option>
+        </select>
+
+        <label for="brightness">Brightness: <span id="brightnessVal">8</span></label>
+        <input id="brightness" type="range" min="-40" max="60" value="8" />
+
+        <label for="contrast">Contrast: <span id="contrastVal">35</span></label>
+        <input id="contrast" type="range" min="0" max="100" value="35" />
+
+        <label for="sharpen">Sharpen: <span id="sharpenVal">35</span></label>
+        <input id="sharpen" type="range" min="0" max="100" value="35" />
+
+        <label for="binarize">
+          <input id="binarize" type="checkbox" checked style="width:auto" />
+          Convert to black & white
+        </label>
+
+        <label for="lang">Recognition language</label>
+        <select id="lang">
+          <option value="eng" selected>English</option>
+          <option value="ara">Arabic</option>
+          <option value="eng+ara">English + Arabic</option>
+        </select>
+
+        <div class="toolbar">
+          <button id="process" class="primary">Enhance & Extract</button>
+          <button id="reset" class="secondary">Clear</button>
+        </div>
+        <div id="status" class="status"></div>
+      </div>
+
+      <div>
+        <label for="result">3. Extracted text — please review and correct</label>
+        <textarea id="result" placeholder="The extracted handwritten text will appear here. Correct names, amounts, dates, and totals before saving."></textarea>
+        <div class="hint">
+          Handwriting recognition is not always perfect. Check every number, item name, and total before using it for records.
+        </div>
+        <div class="toolbar">
+          <button id="save" class="primary">Save Daily Record</button>
+          <button id="copy" class="secondary">Copy Text</button>
+          <button id="download" class="secondary">Download TXT</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="row">
+      <div>
+        <label for="search">Search saved records</label>
+        <input id="search" type="search" placeholder="Search by date or text…" />
+      </div>
+      <div style="max-width:210px">
+        <label for="export">Export</label>
+        <button id="export" class="secondary">Download all as CSV</button>
+      </div>
+    </div>
+    <div id="records"></div>
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const storeKey = "cafe_daily_ocr_records_v1";
+// Longest canvas side we allow. Phone browsers fail silently or crash well above this.
+const MAX_SIDE = 4500;
+let worker = null;
+let workerLang = "";
+let originalImage = null;
+
+const records = () => {
+  try { return JSON.parse(localStorage.getItem(storeKey) || "[]"); }
+  catch { return []; }
+};
+const saveRecords = list => localStorage.setItem(storeKey, JSON.stringify(list));
+const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+
+function setStatus(msg, warn=false) {
+  $("status").textContent = msg;
+  $("status").style.color = warn ? "var(--warn)" : "var(--muted)";
+}
+
+$("file").addEventListener("change", e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    const img = new Image();
+    img.onload = () => {
+      originalImage = img;
+      $("preview").src = img.src;
+      $("preview").style.display = "block";
+      setStatus("Image loaded. Adjust enhancement settings, then press Extract.");
+    };
+    img.src = reader.result;
+  };
+  reader.readAsDataURL(file);
+});
+
+["brightness","contrast","sharpen"].forEach(id => {
+  $(id).addEventListener("input", () => {
+    $(id + "Val").textContent = $(id).value;
+  });
+});
+
+function enhance(img) {
+  let scale = parseFloat($("scale").value);
+  // Cap the output so a 12 MP phone photo at 4× doesn't try to build a ~190 MP canvas.
+  const longest = Math.max(img.naturalWidth, img.naturalHeight) * scale;
+  if (longest > MAX_SIDE) scale = MAX_SIDE / Math.max(img.naturalWidth, img.naturalHeight);
+
+  const w = Math.round(img.naturalWidth * scale);
+  const h = Math.round(img.naturalHeight * scale);
+
+  const canvas = document.createElement("canvas");
+  canvas.width = w;
+  canvas.height = h;
+  const ctx = canvas.getContext("2d", { willReadFrequently: true });
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = "high";
+  ctx.drawImage(img, 0, 0, w, h);
+
+  const frame = ctx.getImageData(0, 0, w, h);
+  const d = frame.data;
+  const brightness = parseInt($("brightness").value, 10);
+  const contrast = parseInt($("contrast").value, 10) / 100;
+  const sharpen = parseInt($("sharpen").value, 10) / 100;
+  const binarize = $("binarize").checked;
+
+  for (let i = 0; i < d.length; i += 4) {
+    let gray = 0.299*d[i] + 0.587*d[i+1] + 0.114*d[i+2];
+    gray = (gray - 128) * (1 + contrast) + 128 + brightness;
+    gray = Math.max(0, Math.min(255, gray));
+    if (binarize) gray = gray > 145 ? 255 : 0;
+    d[i] = d[i+1] = d[i+2] = gray;
+  }
+  ctx.putImageData(frame, 0, 0);
+
+  if (sharpen > 0) {
+    const src = ctx.getImageData(0, 0, w, h);
+    const out = ctx.createImageData(w, h);
+    const a = src.data, o = out.data;
+    o.set(a); // keeps the 1px border opaque instead of transparent/black
+    for (let y = 1; y < h-1; y++) {
+      for (let x = 1; x < w-1; x++) {
+        const p = (y*w + x) * 4;
+        const center = a[p];
+        const around = a[p-4] + a[p+4] + a[p-(w*4)] + a[p+(w*4)];
+        const v = center + sharpen * (center * 4 - around) / 4;
+        o[p] = o[p+1] = o[p+2] = Math.max(0, Math.min(255, v));
+      }
+    }
+    ctx.putImageData(out, 0, 0);
+  }
+
+  return canvas;
+}
+
+async function getWorker(lang) {
+  if (worker && workerLang === lang) return worker;
+  if (worker) { await worker.terminate(); worker = null; }
+  setStatus("Loading recognition engine…");
+  worker = await Tesseract.createWorker(lang, 1, {
+    logger: m => {
+      if (m.status === "recognizing text") {
+        setStatus(`Reading paper… ${Math.round(m.progress * 100)}%`);
+      }
+    }
+  });
+  workerLang = lang;
+  return worker;
+}
+
+$("process").addEventListener("click", async () => {
+  if (!originalImage) {
+    setStatus("Please choose or capture a photo of the paper first.", true);
+    return;
+  }
+  try {
+    $("process").disabled = true;
+    setStatus("Enhancing image…");
+    // Let the browser paint the status before the heavy pixel loop blocks the thread.
+    await new Promise(r => setTimeout(r, 30));
+    const canvas = enhance(originalImage);
+    const lang = $("lang").value;
+    const w = await getWorker(lang);
+    const result = await w.recognize(canvas);
+    const text = (result.data.text || "").replace(/\n{3,}/g, "\n\n").trim();
+    $("result").value = text;
+    const confidence = Math.round(result.data.confidence || 0);
+    setStatus(`Extraction complete. OCR confidence: ${confidence}%. Please review the text carefully.`, confidence < 60);
+  } catch (err) {
+    console.error(err);
+    setStatus("Could not extract the text. Try better lighting, a flatter paper, and a closer photo.", true);
+  } finally {
+    $("process").disabled = false;
+  }
+});
+
+$("save").addEventListener("click", () => {
+  const text = $("result").value.trim();
+  if (!text) {
+    setStatus("Nothing to save yet.", true);
+    return;
+  }
+  try {
+    const list = records();
+    list.unshift({
+      id: Date.now(),
+      date: new Date().toLocaleString(),
+      text,
+      language: $("lang").value
+    });
+    saveRecords(list);
+    renderRecords();
+    setStatus("Daily record saved on this device only. Export to CSV regularly as a backup.");
+  } catch (err) {
+    console.error(err);
+    setStatus("Could not save (storage full or blocked). Download the TXT instead.", true);
+  }
+});
+
+$("copy").addEventListener("click", async () => {
+  try {
+    await navigator.clipboard.writeText($("result").value);
+    setStatus("Text copied.");
+  } catch {
+    setStatus("Copy was blocked by the browser. Select the text and copy manually.", true);
+  }
+});
+
+$("download").addEventListener("click", () => {
+  const blob = new Blob([$("result").value], { type: "text/plain;charset=utf-8" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `cafe-daily-sheet-${new Date().toISOString().slice(0,10)}.txt`;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+});
+
+$("export").addEventListener("click", () => {
+  const list = records();
+  if (!list.length) return;
+  const rows = [["Saved at", "Language", "Extracted text"]];
+  list.forEach(r => rows.push([r.date, r.language, r.text.replace(/\r?\n/g, " | ")]));
+  const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(",")).join("\n");
+  const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "cafe-daily-ocr-records.csv";
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+});
+
+$("search").addEventListener("input", renderRecords);
+$("reset").addEventListener("click", () => {
+  $("file").value = "";
+  $("preview").style.display = "none";
+  $("result").value = "";
+  originalImage = null;
+  setStatus("Cleared.");
+});
+
+function renderRecords() {
+  const q = $("search").value.toLowerCase();
+  const list = records().filter(r =>
+    !q || r.date.toLowerCase().includes(q) || r.text.toLowerCase().includes(q)
+  );
+  $("records").innerHTML = list.length ? list.map(r => `
+    <div class="entry">
+      <h3>${esc(r.date)} <span class="pill">${esc(r.language)}</span></h3>
+      <pre>${esc(r.text)}</pre>
+      <div class="toolbar">
+        <button class="secondary" onclick="loadRecord(${Number(r.id)})">Open</button>
+        <button class="danger" onclick="deleteRecord(${Number(r.id)})">Delete</button>
+      </div>
+    </div>
+  `).join("") : `<p class="hint">No saved records yet.</p>`;
+}
+
+window.loadRecord = id => {
+  const r = records().find(x => x.id === id);
+  if (r) {
+    $("result").value = r.text;
+    $("lang").value = r.language;
+    setStatus("Record opened for review or editing.");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+};
+
+window.deleteRecord = id => {
+  if (!confirm("Delete this saved record? This cannot be undone.")) return;
+  saveRecords(records().filter(r => r.id !== id));
+  renderRecords();
+};
+
+renderRecords();
+</script>
+</body>
+</html>
